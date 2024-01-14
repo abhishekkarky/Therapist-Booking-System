@@ -1,21 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login to your account</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <main class="md:flex justify-center items-center w-[100%] h-screen mx-auto my-auto">
-        <div class="md:w-[320px] w-[90%] h-96 border-2">
-            
+<body class="bg-gray-100">
+    <main class="md:flex justify-center items-center w-full h-screen mx-auto my-auto">
+        <div class="md:w-[320px] w-[90%] mb-8 md:mb-0  md:mr-0">
+            <img class="w-full h-auto rounded-full" src="/static/images/back2.svg" alt="">
         </div>
-        <form class="flex flex-col justify-center px-10 w-1/4 min-h-96 border-2">
-            <h1 class="font-bold text-3xl">Login here...</h1>
-            <input class="w-full h-[50px] mt-10 border-2 px-5 rounded-lg" type="email"  id="email" placeholder="Enter your email address..." required>
-            <input class="w-full h-[50px] mt-2 mb-8 border-2 px-5 rounded-lg" type="password" id="password" placeholder="Enter your password..." required>
-            <button class="bg-black text-white py-2" type="submit">Login</button>
+        <form class="flex flex-col justify-center px-5 md:px-10 w-full md:w-1/2">
+            <h1 class="font-bold text-3xl text-center mb-5">Login to Your account here</h1>
+            <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="email" id="email" placeholder="Enter your email address..." required>
+            <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="password" id="password" placeholder="Enter your password..." required>
+            <button class="bg-black text-white py-2 rounded-md" type="submit">Login</button>
+            <a class="text-black-500 text-center py-2 rounded-md" href="signup" >NOt a Member? click here</a>
         </form>
     </main>
 </body>
