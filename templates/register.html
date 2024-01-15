@@ -12,12 +12,12 @@
         <div class="md:w-[320px] w-[90%] mb-8 md:mb-0  md:mr-0">
             <img class="w-full h-auto rounded-full" src="/static/images/back.svg" alt="">
         </div>
-        <form class="flex flex-col justify-center px-5 md:px-10 w-full md:w-1/2">
+        <form class="flex flex-col justify-center px-5 md:px-10 w-full md:w-1/2" method="post" action="{% url 'register' %}">{% csrf_token %}
             <h1 class="font-bold text-3xl text-center mb-5">Create new account here</h1>
-            <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="text" id="name" placeholder="Enter your fullname..." required>
-            <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="email" id="email" placeholder="Enter your email address..." required>
-            <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="tel" id="number" placeholder="Enter your number..." required>
-            <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="password" id="password" placeholder="Enter your password..." required>
+            <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="text" name="name" id="name" placeholder="Enter your fullname..." required>
+            <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="email" name="email" id="email" placeholder="Enter your email address..." required>
+            <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="tel" name="number" id="number" placeholder="Enter your number..." required>
+            <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="password" name="password" id="password" placeholder="Enter your password..." required>
             <button class="bg-black text-white py-2 rounded-md" type="submit">Signup</button>
             <a class="text-black-500 text-center py-2 rounded-md" href="login" >Already a Member? click here</a>
         </form>
