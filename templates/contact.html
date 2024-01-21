@@ -127,18 +127,18 @@
       </div>
     </div>
     <div class="h-[80vh] flex justify-center items-center bg-[#f3e4df]">
-        <form class="w-3/5 bg-white rounded-[10px]">
+        <form class="w-3/5 bg-white rounded-[10px]" method="post" action="{% url 'contact' %}">{% csrf_token %}
            <div class="p-20">
             <div class="mb-4 flex ">
-                <input type="text" class="w-1/2 rounded-[20px] p-3 mr-2 border-2 border-[#E77450]" placeholder="First Name">
-                <input type="text" class="w-1/2 rounded-[20px] p-3  border-2 border-[#E77450]" placeholder="Last Name">
+                <input type="text" name="firstName" class="w-1/2 rounded-[20px] p-3 mr-2 border-2 border-[#E77450]" placeholder="First Name">
+                <input type="text" name="lastName" class="w-1/2 rounded-[20px] p-3  border-2 border-[#E77450]" placeholder="Last Name">
             </div>
             <div class="mb-4 flex">
-                <input type="email" class="w-1/2 rounded-[20px] p-3 mr-2  border-2 border-[#E77450]" placeholder="Email Address">
-                <input type="tel" class="w-1/2 rounded-[20px] p-3  border-2 border-[#E77450]" placeholder="Phone Number">
+                <input type="email" name="email" class="w-1/2 rounded-[20px] p-3 mr-2  border-2 border-[#E77450]" placeholder="Email Address">
+                <input type="tel" name="phone" class="w-1/2 rounded-[20px] p-3  border-2 border-[#E77450]" placeholder="Phone Number">
             </div>
             <div class="mb-4 flex">
-                <textarea type="text" class="w-1/2 rounded-[20px] row-4 p-3 mr-2  border-2 border-[#E77450]" placeholder="Message"></textarea>
+                <textarea name="message" type="text" class="w-1/2 rounded-[20px] row-4 p-3 mr-2  border-2 border-[#E77450]" placeholder="Message"></textarea>
             </div>
             <div class="flex">
                 <button type="submit" class="w-1/2 bg-[#E77450] focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-4 py-2 text-center text-white">Submit</button>
