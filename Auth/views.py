@@ -54,3 +54,16 @@ def FAQ(request):
 @login_required
 def contect(request):
     return render(request, 'contact.html')
+
+def adminPage(request):
+    return render(request, 'admin/admin-panel.html')
+
+def adminProperty(request):
+    return render(request, 'admin/property-management.html')
+
+def enquiryProperty(request):
+    return render(request, 'admin/enquiry-management.html')
+def agentManagement(request):
+    return render(request, 'admin/agent-management.html')
+def teamsManagement(request):
+    return render(request, 'admin/teams-management.html')
