@@ -14,10 +14,10 @@
         </div>
         <form class="flex flex-col justify-center px-5 md:px-10 w-full md:w-1/2" action="{% url 'login' %}" method="post" >{% csrf_token %}
             <h1 class="font-bold text-3xl text-center mb-5">Login to Your account here</h1>
-            <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="tel" name="number" id="number" placeholder="Enter your Number..." required>
+            <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="tel" name="number" id="number" placeholder="Enter your number..." required>
             <input class="w-full h-[50px] mb-3 border-2 px-3 py-2 rounded-md" type="password" name="password" id="password" placeholder="Enter your password..." required>
             <button class="bg-black text-white py-2 rounded-md" type="submit">Login</button>
-            <a class="text-black-500 text-center py-2 rounded-md" href="signup" >NOt a Member? click here</a>
+            <a class="text-black-500 text-center py-2 rounded-md" href="signup" >Not a Member? click here</a>
         </form>
     </main>
 </body>
