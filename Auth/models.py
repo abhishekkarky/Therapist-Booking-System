@@ -16,3 +16,12 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.number
+    
+
+class Therapist(models.Model):
+    image = models.ImageField(upload_to='media/', default='/static/images/img_1.jpg')
+    name = models.CharField(max_length = 20)
+    price = models.CharField(max_length = 30)
+    speciality = models.CharField(max_length = 100)
+    description = models.CharField(max_length = 1000)
+

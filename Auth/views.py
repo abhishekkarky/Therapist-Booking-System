@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate
+from Auth.models import Therapist
 
 def user_login(request):
     if request.method == 'POST':
@@ -39,19 +40,20 @@ def register(request):
 
     return render(request, 'register.html')
 
-@login_required
+# @login_required
 def about(request):
-    return render(request, 'about.html')
+    therapist = Therapist.objects.all()
+    return render(request, 'about.html', {'therapist': therapist})
 
-@login_required
+# @login_required
 def services(request):
     return render(request, 'services.html')
 
-@login_required
+# @login_required
 def FAQ(request):
     return render(request, 'FAQ.html')
 
-@login_required
+# @login_required
 def contect(request):
     return render(request, 'contact.html')
 
@@ -60,5 +62,6 @@ def adminPage(request):
 
 def bookingManagement(request):
     return render(request, 'admin/booking-management.html')
+
 def teamsManagement(request):
     return render(request, 'admin/teams-management.html')
