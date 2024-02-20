@@ -56,6 +56,9 @@ def FAQ(request):
 # @login_required
 def contect(request):
     return render(request, 'contact.html')
+# @login_required
+def individual(request):
+    return render(request, 'individual_therapist.html')
 
 def adminPage(request):
     return render(request, 'admin/admin-panel.html')

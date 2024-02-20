@@ -8,6 +8,7 @@ urlpatterns = [
     path('services', views.services, name='services'),
     path('faq', views.FAQ, name='faq'),
     path('contact', views.contect, name='contact'),
+    path('individual_therapist', views.individual, name='individual'),
     path('admin-page', views.adminPage, name='admin-page'),
     path('admin-booking-management', views.bookingManagement, name='admin-booking-management'),
     path('admin-teams-management', views.teamsManagement, name='admin-teams-management'),

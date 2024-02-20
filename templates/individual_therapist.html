@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Therapist Booking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        .close:hover {
+            color: red;
+        }
+        
+    </style>
+
+
+</head>
+
+<body>
+    <nav class="bg-white  w-full  top-0 start-0 ">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <img src="/static/images/logo.png" class="h-10"  width="100" alt="">
+            </a>
+            <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                <button type="button"
+                    class="text-white bg-[#E77450] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#E77450] dark:hover:bg-[#F5A58C] dark:focus:ring-blue-800">Get
+                    started</button>
+                <button data-collapse-toggle="navbar-sticky" type="button"
+                    class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-black-500 rounded-lg md:hidden  focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400  dark:focus:ring-gray-600"
+                    aria-controls="navbar-sticky" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 17 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M1 1h15M1 7h15M1 13h15" />
+                    </svg>
+                </button>
+            </div>
+            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+                <ul
+                    class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100  bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:border-black-700">
+                    <li>
+                        <a href="/" class="block py-2 px-3 text-gray-500 bg-blue-700  md:bg-transparent md:text-black-500 md:p-0 dark:hover:text-gray-300
+          md:dark:text-Black-500" aria-current="page">Home</a>
+                    </li>
+                    <li>
+                        <a href="about" class="block py-2 px-3 text-gray-500   md:hover:text-black-700 md:p-0 md:dark:hover:text-black-500 dark:text-gray 
+          dark:hover:bg-black-700 dark:hover:text-gray-300 dark:border-gray-700">About us</a>
+                    </li>
+                    <li>
+                        <a href="services" class="block py-2 px-3 text-gray-500   md:hover:text-black-700 md:p-0 md:dark:hover:text-black-500 dark:text-gray
+           dark:hover:bg-black-700 dark:hover:text-gray-300  dark:border-gray-700">Services</a>
+                    </li>
+                    <li>
+                        <a href="contact" class="block py-2 px-3 text-gray-500 md:hover:text-black-700 md:p-0 md:dark:hover:text-black-500 dark:text-gray 
+          dark:hover:bg-black-700 dark:hover:text-gray-300  dark:border-gray-700">Contact</a>
+                    </li>
+                    <li>
+                        <a href="faq" class="block py-2 px-3 text-gray-500 md:hover:text-black-700 md:p-0 md:dark:hover:text-black-500 dark:text-gray 
+          dark:hover:bg-black-700 dark:hover:text-gray-300  dark:border-gray-700">FAQ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+<!-- main body -->
+<div class="container mx-auto flex flex-wrap p-8 lg:py-16"> <!-- Increased padding here -->
+    <!-- Therapist Image -->
+    <div class="w-full lg:w-1/2 mb-8 lg:mb-0">
+        <img src="/static/images/logo.png" class="w-full" alt="Therapist Image">
+    </div>
+    <!-- Therapist Details -->
+    <div class="w-full lg:w-1/2 flex flex-col justify-center px-4">
+        <!-- Therapist Name -->
+        <h2 class="text-2xl font-bold mb-4">Therapist Name</h2>
+        <!-- Personal Details -->
+        <p class="text-gray-500 mb-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam consectetur ante vel nunc convallis, sit amet tempus nunc rhoncus. Proin vitae ullamcorper lectus.</p>
+        <!-- Additional Details -->
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-2">Address</h3>
+            <p class="text-gray-500">123 Main Street, City, State, ZIP</p>
+        </div>
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-2">Fee</h3>
+            <p class="text-gray-500">$100 per session</p>
+        </div>
+        <!-- Button to Open Modal -->
+        <button id="openModal" class="mb-4 bg-[#E77450] text-white font-bold py-2 px-4 rounded">
+            Book Appointment
+        </button>
+    </div>
+</div>
+
+
+<div id="myModal" class="modal hidden fixed inset-0 bg-gray-300 bg-opacity-75 flex items-center justify-center">
+    <div class="modal-content bg-white p-6 w-1/2 relative">
+        <span id="closeModal" class="close absolute top-2 right-5 cursor-pointer ">&times;</span>
+        
+        <!-- Appointment Booking Form -->
+        <form id="appointmentForm" class="grid grid-cols-2 gap-4">
+            <div class="mb-4">
+                <label for="appointmentDate">Date:</label>
+                <input type="date" id="appointmentDate" name="appointmentDate" class="w-full border p-2" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="appointmentTime">Time:</label>
+                <input type="time" id="appointmentTime" name="appointmentTime" class="w-full border p-2" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="appointmentType">Appointment Type:</label>
+                <select id="appointmentType" name="appointmentType" class="w-full border p-2" required>
+                    <option value="physical">Physical</option>
+                    <option value="virtual">Virtual</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="appointmentDescription">Additional Notes:</label>
+                <textarea id="appointmentDescription" name="appointmentDescription" class="w-full border p-2"></textarea>
+            </div>
+
+            <button type="submit" class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded">Book Appointment</button>
+        </form>
+    </div>
+</div>
+
+
+
+<footer class="bg-[#FBFBFB] dark:bg-[#FBFBFB]">
+    <div class="mx-auto w-full flex flex-wrap max-w-screen-xl p-4 m-4 py-6 lg:py-8">
+        <div class="md:flex md:justify-center w-full lg:w-1/4">
+            <div class="mb-6 md:mb-0 text-center md:text-left">
+                <a href="/" class="flex items-center">
+                    <img src="static/images/logo.png" class="h-10 w-[300] me-3" alt="FlowBite Logo" />
+                </a>
+                <p class="text-white-500 mt-2 dark:text-white-400 text-xs pb-2 whitespace-pre-line">A comprehensive list of <strong>THERAPIST</strong> services you offer.</p>
+                <h2><i class="fa-solid fa-location-dot pr-2 text-sm"></i> Kathmandu, Nepal</h2>
+                <h2><i class="fa-solid fa-envelope pr-2 text-sm"></i> Therapy@gmail.com</h2>
+                <h2><i class="fa-solid fa-phone pr-2 text-sm"></i> 9879879876</h2>
+            </div>
+        </div>
+        <div class="md:flex md:justify-center w-full lg:w-1/4 mt-4 md:mt-0">
+            <div class="mb-6 md:mb-0 text-center md:text-left">
+                <h1 class="font-bold text-2xl pb-5">Services</h1>
+                <h2>Online Therapy</h2>
+                <h2>Teen Therapy</h2>
+            </div>
+        </div>
+        <div class="md:flex md:justify-center w-full lg:w-1/4 mt-4 md:mt-0">
+            <div class="mb-6 md:mb-0 text-center md:text-left">
+                <h1 class="font-bold text-2xl pb-5">About</h1>
+                <h2><a href="#">Home</a></h2>
+                <h2><a href="#">About us</a></h2>
+                <h2><a href="#">Our Services</a></h2>
+            </div>
+        </div>
+        <div class="md:flex md:justify-center w-full lg:w-1/4 mt-4 md:mt-0">
+            <div class="mb-6 md:mb-0 text-center md:text-left">
+                <h1 class="font-bold text-2xl pb-5">Newsletter</h1>
+                <h2 class="pb-4">Subscribe</h2>
+                <div class="rounded-full bg-gray-200 flex items-center">
+                    <form class="flex">
+                        <input type="text" class="rounded-l-full bg-[#DCE8EB] px-2 py-1" placeholder="Enter your mail">
+                        <button class="rounded-r-full bg-[#FFC979] text-white px-3 py-1">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <hr class="my-6 border-white-200 sm:mx-auto dark:border-white-700 lg:my-8 w-full" />
+    </div>
+</footer>
+
+<script>
+    document.getElementById('openModal').addEventListener('click', function () {
+        document.getElementById('myModal').classList.remove('hidden');
+    });
+
+    document.getElementById('closeModal').addEventListener('click', function () {
+        document.getElementById('myModal').classList.add('hidden');
+    });
+
+    // Handle form submission
+    document.getElementById('propertyForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // Here, you can handle the form data submission to your backend or perform any other desired actions.
+        // For demonstration purposes, we'll simply log the form data to the console.
+
+        const formData = new FormData(event.target);
+        const propertyData = {};
+        formData.forEach((value, key) => {
+            propertyData[key] = value;
+        });
+
+        console.log('Property Data:', propertyData);
+
+        event.target.reset();
+        document.getElementById('myModal').classList.add('hidden');
+    });
+</script>
+
+</body>
+</html>

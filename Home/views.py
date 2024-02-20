@@ -6,7 +6,7 @@ from Home.models import ContactList
 
 
 # Create your views here.
-@login_required
+# @login_required
 def home(request):
     return render(request, 'home.html')
 
