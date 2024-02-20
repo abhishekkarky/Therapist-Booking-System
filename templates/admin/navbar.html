@@ -1,7 +1,6 @@
 <nav>
   <div class="logo-name">
       <img src="/static/images/logo.png" alt="" />
-
   </div>
 
   <div class="menu-items">
@@ -15,13 +14,13 @@
       <li>
         <a href="/admin-booking-management">
           <i class="uil uil-envelope"></i>
-          <span class="link-name">Booking Management</span>
+          <span class="link-name">Appointments</span>
         </a>
       </li>
       <li>
         <a href="/admin-teams-management">
           <i class="uil uil-user"></i>
-          <span class="link-name">Teams Management</span>
+          <span class="link-name">Teams</span>
         </a>
       </li>
       {% comment %} <li>
@@ -70,14 +69,15 @@
         </a>
       </li>
 
+     
       <li class="mode">
-        <a href="#">
+        {% comment %} <a href="#">
           <i class="uil uil-moon"></i>
           <span class="link-name">Dark Mode</span>
-        </a>
+        </a> {% endcomment %}
 
         <div class="mode-toggle">
-          <span class="switch"></span>
+          {% comment %} <span class="switch"></span> {% endcomment %}
         </div>
       </li>
     </ul>
