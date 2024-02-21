@@ -72,22 +72,22 @@
 <div class="container mx-auto flex flex-wrap p-8 lg:py-16"> <!-- Increased padding here -->
     <!-- Therapist Image -->
     <div class="w-full lg:w-1/2 mb-8 lg:mb-0">
-        <img src="/static/images/logo.png" class="w-full" alt="Therapist Image">
+        <img src="{{details.image.url}}" class="w-full" alt="Therapist Image">
     </div>
     <!-- Therapist Details -->
     <div class="w-full lg:w-1/2 flex flex-col justify-center px-4">
         <!-- Therapist Name -->
-        <h2 class="text-2xl font-bold mb-4">Therapist Name</h2>
+        <h2 class="text-2xl font-bold mb-4">{{details.name}}</h2>
         <!-- Personal Details -->
-        <p class="text-gray-500 mb-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam consectetur ante vel nunc convallis, sit amet tempus nunc rhoncus. Proin vitae ullamcorper lectus.</p>
+        <p class="text-gray-500 mb-6">{{details.description}}</p>
         <!-- Additional Details -->
         <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-2">Address</h3>
-            <p class="text-gray-500">123 Main Street, City, State, ZIP</p>
+            <h3 class="text-lg font-semibold mb-2">Speciality</h3>
+            <p class="text-gray-500">{{details.specialty}}</p>
         </div>
         <div class="mb-6">
             <h3 class="text-lg font-semibold mb-2">Fee</h3>
-            <p class="text-gray-500">$100 per session</p>
+            <p class="text-gray-500">{{details.price}}</p>
         </div>
         <!-- Button to Open Modal -->
         <button id="openModal" class="mb-4 bg-[#E77450] text-white font-bold py-2 px-4 rounded">

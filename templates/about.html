@@ -149,20 +149,22 @@
         >
           <img
             src="{{therapist.image.url}}"
-            class="w-full h-64 object-cover mx-1" alt="{{ therapist.name }}">
+            class="w-full h-64 object-cover mx-1"
+            alt="{{ therapist.name }}"
+          />
           <div class="therapist-hover-details">
             <h2 class="mb-2">{{therapist.name}}</h2>
             <p class="mb-2">{{therapist.speciality}}</p>
-            <a href="individual_therapist" class="mb-2 bg-[#E77450] text-white font-bold py-2 px-4 rounded">
-                See Details
-              </a>
+            <a
+              href="/individual_therapist/{{ therapist.id }}"
+              class="mb-2 bg-[#E77450] text-white font-bold py-2 px-4 rounded"
+            >
+              See Details
+            </a>
           </div>
         </div>
         {% endfor %}
       </div>
-
-
-   
     </div>
 
     <footer class="bg-[#FBFBFB] dark:bg-[#FBFBFB]">
