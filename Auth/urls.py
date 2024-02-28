@@ -12,6 +12,6 @@ urlpatterns = [
     path('admin-page', views.adminPage, name='admin-page'),
     path('admin-booking-management', views.bookingManagement, name='admin-booking-management'),
     path('admin-teams-management', views.teamsManagement, name='admin-teams-management'),
-    path('admin-edit-therapist', views.editTherapist, name='admin-edit-therapist'),
-    
+    path('admin-edit-therapist/<int:therapist_id>', views.editTherapist, name='admin-edit-therapist'),
+    path('admin-delete-therapist/<int:therapist_id>', views.deleteTherapist, name='admin-delete-therapist'),
 ]

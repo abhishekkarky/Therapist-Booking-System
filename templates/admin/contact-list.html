@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact List</title>
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="/static/css/adminpanel.css" />
+
+    <!----===== Iconscout CSS ===== -->
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body>
+    <!-- Include navbar.html -->
+    {% include 'admin/navbar.html' %}
+    
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+            <div class="search-box">
+                <i class="uil uil-search"></i>
+                <input type="text" placeholder="Search here..." />
+            </div>
+            <img src="/static/images/profile.jpg" alt="" />
+        </div>
+
+        <div class="dash-content p-6">
+            <div class="overview">
+                <div class="title flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <i class="uil uil-tachometer-fast-alt text-2xl"></i>
+                        <span class="text-2xl ml-2">Contact List</span>
+                    </div>
+                </div>
+        
+                <!-- Table with property data -->
+                <table class="w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b">ID</th>
+                            <th class="py-2 px-4 border-b">firstName</th>
+                            <th class="py-2 px-4 border-b">lastName</th>
+                            <th class="py-2 px-4 border-b">email</th>
+                            <th class="py-2 px-4 border-b">phone</th>
+                            <th class="py-2 px-4 border-b">message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Example row with additional fields -->
+                        {% for details in details %}
+                        <tr>
+                            <td class="py-2 px-4 border-b">{{details.id}}</td>
+                            <td class="py-2 px-4 border-b">{{details.firstName}}</td>
+                            <td class="py-2 px-4 border-b">{{details.lastName}}</td>
+                            <td class="py-2 px-4 border-b">{{details.email}}</td>
+                            <td class="py-2 px-4 border-b">{{details.phone}}</td>
+                            <td class="py-2 px-4 border-b">{{details.message}}</td>
+                        </tr>
+                        {% endfor %}
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Include admin-panel.js -->
+    <script src="/static/js/admin-panel.js"></script>
+</body>
+</html>

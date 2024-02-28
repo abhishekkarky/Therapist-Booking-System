@@ -30,3 +30,7 @@ def contact(request):
             print(e)
     return render(request, 'contact.html')
 
+def contactList(request):
+    details = ContactList.objects.all()
+    return render(request, 'admin/contact-list.html', {'details': details})
+

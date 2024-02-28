@@ -26,14 +26,16 @@
       <div class=" bg-white p-6 w-1/2">
 
         <!-- Property Add Form -->
-        <form id="propertyForm" class="grid grid-cols-2 gap-4">
+        <form id="propertyForm" class="grid grid-cols-2 gap-4" method="post" action="{% url 'admin-edit-therapist' therapist_id=details.id %}"
+        enctype="multipart/form-data">{% csrf_token %}
           <div class="mb-4">
             <label for="propertyName">Name:</label>
             <input
               type="text"
               id="propertyName"
-              name="propertyName"
+              name="name"
               class="w-full border p-2"
+              value="{{details.name}}"
               required
             />
           </div>
@@ -43,8 +45,9 @@
             <input
               type="text"
               id="propertyAddress"
-              name="propertyAddress"
+              name="price"
               class="w-full border p-2"
+              value="{{details.price}}"
               required
             />
           </div>
@@ -54,8 +57,9 @@
             <input
               type="text"
               id="phone"
-              name="phone"
+              name="speciality"
               class="w-full border p-2"
+              value="{{details.speciality}}"
               required
             />
           </div>
@@ -64,10 +68,10 @@
             <label for="propertyDescription">Description:</label>
             <textarea
               id="propertyDescription"
-              name="propertyDescription"
+              name="description"
               class="w-full border p-2"
               required
-            ></textarea>
+            >{{details.description}}</textarea>
           </div>
 
          
@@ -81,7 +85,7 @@
             <input
               type="file"
               id="propertyPhotos"
-              name="propertyPhotos"
+              name="image"
               class="w-full border p-2"
               multiple
             />

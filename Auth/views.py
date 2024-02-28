@@ -69,7 +69,65 @@ def bookingManagement(request):
     return render(request, 'admin/booking-management.html')
 
 def teamsManagement(request):
-    return render(request, 'admin/teams-management.html')
+    therapist = Therapist.objects.all()
+    if request.method == 'POST':
+        image = request.FILES.get("image")
+        name = request.POST.get("name")
+        price = request.POST.get("price")
+        speciality = request.POST.get("speciality")
+        description = request.POST.get("description")
+        
+        therapist = Therapist(
+            image=image,
+            name=name,
+            price=price,
+            speciality=speciality,
+            description=description
+        )
 
-def editTherapist(request):
-    return render(request, 'admin/edit_therapist.html')
+        try:
+            therapist.save()
+            message = "Therapist added successfully"
+            messages.success(request, message)
+            return redirect('/admin-teams-management') 
+        except Exception as e:
+            message = "Couldn't add therapist. Please try again later."
+            messages.error(request, message)
+            print(e) 
+
+    return render(request, 'admin/teams-management.html', {'therapist': therapist})
+
+def editTherapist(request, therapist_id):
+    details = get_object_or_404(Therapist, id=therapist_id)
+    
+    if request.method == 'POST':
+        # Retrieve existing property instance
+        therapist = Therapist.objects.get(pk=therapist_id)
+        
+        # Update fields with new values
+        therapist.image = request.FILES.get("image")
+        therapist.name = request.POST.get("name")
+        therapist.price = request.POST.get("price")
+        therapist.speciality = request.POST.get("speciality")
+        therapist.description = request.POST.get("description")
+        
+        try:
+            # Save the updated property
+            therapist.save()
+            
+            message = "Therapist edited successfully"
+            messages.success(request, message)
+            return redirect('/admin-teams-management') 
+        except Exception as e:
+            message = "Couldn't edit property. Please try again later."
+            messages.error(request, message)
+            print(e) 
+    return render(request, 'admin/edit_therapist.html', {'details': details})
+
+
+def deleteTherapist(request, therapist_id):
+    therapist_obj = get_object_or_404(Therapist, pk=therapist_id)
+    therapist_obj.delete()
+    message = "Therapist deleted successfully"
+    messages.success(request, message)
+    return redirect('/admin-teams-management') 
