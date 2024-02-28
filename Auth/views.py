@@ -70,3 +70,6 @@ def bookingManagement(request):
 
 def teamsManagement(request):
     return render(request, 'admin/teams-management.html')
+
+def editTherapist(request):
+    return render(request, 'admin/edit_therapist.html')

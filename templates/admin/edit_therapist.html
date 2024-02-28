@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Therapist Management</title>
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="/static/css/adminpanel.css" />
+
+    <!----===== Iconscout CSS ===== -->
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+
+   
+
+    <!-- Modal -->
+    <div
+      id="myModal"
+      class="modal  fixed inset-0 bg-gray-300 bg-opacity-75 flex items-center justify-center"
+    >
+      <div class=" bg-white p-6 w-1/2">
+
+        <!-- Property Add Form -->
+        <form id="propertyForm" class="grid grid-cols-2 gap-4">
+          <div class="mb-4">
+            <label for="propertyName">Name:</label>
+            <input
+              type="text"
+              id="propertyName"
+              name="propertyName"
+              class="w-full border p-2"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="propertyAddress">Price:</label>
+            <input
+              type="text"
+              id="propertyAddress"
+              name="propertyAddress"
+              class="w-full border p-2"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="propertyRooms">Speciality:</label>
+            <input
+              type="text"
+              id="phone"
+              name="phone"
+              class="w-full border p-2"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="propertyDescription">Description:</label>
+            <textarea
+              id="propertyDescription"
+              name="propertyDescription"
+              class="w-full border p-2"
+              required
+            ></textarea>
+          </div>
+
+         
+
+         
+         
+
+          <div class="mb-4">
+            <!-- Add a file input for photos -->
+            <label for="propertyPhotos">Photos:</label>
+            <input
+              type="file"
+              id="propertyPhotos"
+              name="propertyPhotos"
+              class="w-full border p-2"
+              multiple
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="col-span-2 bg-[#2d6904] text-white px-4 py-2 rounded"
+          >
+            Edit Therapist
+          </button>
+          <a
+          class="col-span-2 bg-gray-700 text-white text-center px-4 py-2 rounded"
+          href="/admin-teams-management"
+
+        >
+          Cancel
+        </a>
+        </form>
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>
