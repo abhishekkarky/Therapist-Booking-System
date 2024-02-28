@@ -25,3 +25,11 @@ class Therapist(models.Model):
     speciality = models.CharField(max_length = 100)
     description = models.CharField(max_length = 1000)
 
+
+class Booking(models.model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE)
+    date = models.DateField()
+    time = models.TimeField()
+    appointmentType = models.CharField()
+    note = models.TextField(blank=True, null=True)
