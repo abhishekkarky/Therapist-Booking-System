@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="modal-content bg-white p-6 w-1/2 relative">
+      <h1 class="mx-auto mb-4 text-2xl text-center">
+        {{ request.GET.therapist_name }}
+      </h1>
+
+      <form
+        id="appointmentForm"
+        action="{% url 'booking' %}"
+        class="grid grid-cols-2 gap-4"
+        method="post"
+      >
+        {% csrf_token %}
+        <input
+          type="text"
+          name="therapist"
+          disabled
+          value="{{request.GET.therapist_id}}"
+        />
+        <input disabled type="text" name="user" value="{{ request.user.id }}" />
+        <div class="mb-4">
+          <label for="appointmentDate">Date:</label>
+          <input
+            type="date"
+            id="appointmentDate"
+            name="date"
+            class="w-full border p-2"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="appointmentTime">Time:</label>
+          <input
+            type="time"
+            id="appointmentTime"
+            name="time"
+            class="w-full border p-2"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="appointmentType">Appointment Type:</label>
+          <select
+            id="appointmentType"
+            name="appointmentType"
+            class="w-full border p-2"
+            required
+          >
+            <option value="physical">Physical</option>
+            <option value="virtual">Virtual</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label for="appointmentDescription">Additional Notes:</label>
+          <textarea
+            id="appointmentDescription"
+            name="note"
+            class="w-full border p-2"
+          ></textarea>
+        </div>
+        {% if user.is_authenticated %}
+        <button
+          type="submit"
+          class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded"
+        >
+          Book Appointment
+        </button>
+        {% else %}
+        <span>Please login to proceed to Book an Appointment</span>
+        <a
+          class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded"
+          href="login"
+          >Login</a
+        >
+        {% endif %}
+        <a
+          href="/about"
+          class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded text-center"
+        >
+          Back to Therapists
+        </a>
+      </form>
+    </div>
+  </body>
+</html>
