@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate
@@ -156,7 +156,7 @@ def deleteTherapist(request, therapist_id):
 
 def bookinglist(request):
     user = request.user.id
-    user_bookings = Booking.objects.filter(user = user)
+    user_bookings = Booking.objects.filter(user=user)
     context = {
         'bookings': user_bookings
     }
@@ -168,6 +168,7 @@ def booking(request):
     if request.method == 'POST':
         # Fetching therapist details from the request
         therapist_id = request.POST.get('therapist')
+        print("thjsdkghlkjsdghsdk", therapist_id)
         date = request.POST.get('date')
         time = request.POST.get('time')
         appointmentType = request.POST.get('appointmentType')
@@ -184,11 +185,12 @@ def booking(request):
 
                 # Creating a Booking instance with the fetched therapist instance and the user
                 booking = Booking(
-                    user=request.user, therapist=therapist_instance, date=date, note=note)
+                    user=request.user, therapist=therapist_instance, date=date, appointmentType=appointmentType, note=note)
                 booking.save()
 
                 message = "Booking added successfully!!"
                 messages.success(request, message)
+                print(messages.success(request, message))
                 return redirect('/about')
             else:
                 message = "User is not authenticated"
@@ -201,6 +203,14 @@ def booking(request):
             return redirect('/booking')
     else:
         return render(request, 'booking_page.html')
+
+def user_delete_booking(request, id):
+    booking_delete = get_object_or_404(Booking, pk=id)
+    booking_delete.delete()
+    message = "Booking deleted successfully"
+    messages.success(request, message)
+    return redirect('/bookinglist') 
+
 
 def user_logout(request):
     logout(request)

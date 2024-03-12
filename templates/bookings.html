@@ -12,7 +12,6 @@
   </head>
 
   <body class="bg-gray-100">
-    <!-- {% include 'navbar.html' %} -->
     <div class="container mx-auto px-4 md:px-10 py-4 md:py-7">
       <div class="flex items-center justify-between">
         <p
@@ -39,7 +38,7 @@
                 scope="col"
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
-                Property
+                Therapist
               </th>
               <th
                 scope="col"
@@ -51,7 +50,19 @@
                 scope="col"
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
+                Time
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Note
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Appointment Type
               </th>
               <th
                 scope="col"
@@ -62,13 +73,17 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <!-- {% for booking in bookings %} -->
+            {% for booking in bookings %}
             <tr>
               <td class="px-6 py-4 whitespace-nowrap">
-                <!-- {{ booking.property.name }} -->
+                {{ booking.therapist.name }}
               </td>
-              <!-- <td class="px-6 py-4 whitespace-nowrap">{{ booking.date }}</td> -->
-              <!-- <td class="px-6 py-4 whitespace-nowrap">{{ booking.note }}</td> -->
+              <td class="px-6 py-4 whitespace-nowrap">{{ booking.date }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ booking.time }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ booking.note }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                {{ booking.appointmentType }}
+              </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <!-- Add delete button here if needed -->
                 <!-- Example: -->

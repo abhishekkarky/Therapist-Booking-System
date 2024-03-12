@@ -27,7 +27,6 @@ def contact(request):
         except Exception as e:
             message = "Couldn't process your request!! Please try again later."
             messages.error(request, message)
-            print(e)
     return render(request, 'contact.html')
 
 def contactList(request):

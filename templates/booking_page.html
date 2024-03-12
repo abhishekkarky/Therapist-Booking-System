@@ -11,10 +11,12 @@
     />
   </head>
   <body>
-    <div class="modal-content bg-white p-6 w-1/2 relative">
-      <h1 class="mx-auto mb-4 text-2xl text-center">
-        {{ request.GET.therapist_name }}
-      </h1>
+    <div
+      class="fixed inset-0 bg-gray-300 bg-opacity-75 flex items-center justify-center"
+    >
+      <div class="bg-white p-6 w-1/2 relative">
+        <h1 class="mx-auto mb-4 text-center text-2xl">{{ request.GET.therapist_name }}</h1>
+       
 
       <form
         id="appointmentForm"
@@ -24,12 +26,16 @@
       >
         {% csrf_token %}
         <input
-          type="text"
+          type="hidden"
           name="therapist"
-          disabled
           value="{{request.GET.therapist_id}}"
         />
-        <input disabled type="text" name="user" value="{{ request.user.id }}" />
+        <input
+          type="hidden"
+          name="therapist_name"
+          value="{{request.GET.therapist_name}}"
+        />
+
         <div class="mb-4">
           <label for="appointmentDate">Date:</label>
           <input
@@ -73,21 +79,12 @@
             class="w-full border p-2"
           ></textarea>
         </div>
-        {% if user.is_authenticated %}
         <button
           type="submit"
           class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded"
         >
           Book Appointment
         </button>
-        {% else %}
-        <span>Please login to proceed to Book an Appointment</span>
-        <a
-          class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded"
-          href="login"
-          >Login</a
-        >
-        {% endif %}
         <a
           href="/about"
           class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded text-center"
@@ -95,6 +92,9 @@
           Back to Therapists
         </a>
       </form>
+    </div>
+</div>
+
     </div>
   </body>
 </html>

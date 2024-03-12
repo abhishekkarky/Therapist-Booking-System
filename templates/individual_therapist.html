@@ -22,7 +22,7 @@
 
   <body>
     {% include 'header.html' %}
-    
+
     <!-- main body -->
     <div class="container mx-auto flex flex-wrap p-8 lg:py-16">
       <!-- Increased padding here -->
@@ -46,12 +46,22 @@
           <p class="text-gray-500">{{details.price}}</p>
         </div>
         <!-- Button to Open Modal -->
+
+        {% if user.is_authenticated %}
         <a
           href="{% url 'booking' %}?therapist_id={{ details.id }}&therapist_name={{ details.name }}"
-          class="btn btn-primary py-2 px-3 m-5"
+          class="col-span-2 w-[300px] text-center bg-[#E77450] text-white px-4 py-2 rounded"
         >
           Book Appointment
         </a>
+        {% else %}
+        <span>Please login to proceed to Book an Appointment</span>
+        <a
+          href="/login"
+          class="col-span-2 w-[300px] text-center bg-[#E77450] text-white px-4 py-2 rounded"
+          >Login</a
+        >
+        {% endif %}
       </div>
     </div>
 
