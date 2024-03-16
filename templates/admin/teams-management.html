@@ -42,62 +42,62 @@
               Add
             </button>
           </div>
-
-          <!-- Table with property data -->
-          <table class="w-full bg-white border border-gray-200">
-            <thead>
-              <tr>
-                <th class="py-2 px-4 border-b">ID</th>
-                <th class="py-2 px-4 border-b">Image</th>
-                <th class="py-2 px-4 border-b">Name</th>
-                <th class="py-2 px-4 border-b">Price</th>
-                <th class="py-2 px-4 border-b">Speciality</th>
-                <th class="py-2 px-4 border-b">Description</th>
-                <th class="py-2 px-4 border-b">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Example row with additional fields -->
-              {% for therapist in therapist %}
-              <tr>
-                <td class="py-2 px-4 border-b">{{therapist.id}}</td>
-                <td class="py-2 px-4 border-b"><img
-                  src="{{ therapist.image.url }}"
-                  alt="Property Image"
-                  class="w-8 h-8 mr-2"
-                /></td>
-                <td class="py-2 px-4 border-b">{{therapist.name}}</td>
-                <td class="py-2 px-4 border-b">{{therapist.price}}</td>
-                <td class="py-2 px-4 border-b">
-                  {{therapist.speciality}}
-                </td>
-                <td class="py-2 px-4 border-b">{{therapist.description}}</td>
-                <td class="py-2 px-4 border-b">
-                  <a href="/admin-edit-therapist/{{ therapist.id }}">
-                    <i
-                      id="openEditModal"
-                      class="uil uil-edit text-green-500 cursor-pointer hover:text-green-700"
-                    ></i>
-                  </a>
-                  <a
-                    href="/admin-delete-therapist/{{ therapist.id }}"
-                    type="submit"
-                    ><i
-                      class="uil uil-trash-alt text-red-500 cursor-pointer hover:text-red-700"
-                      data-property-id="{{ therapist.id }}"
-                    ></i>
-                  </a>
-                </td>
-              </tr>
-              {% endfor %}
-
-            </tbody>
-          </table>
+          <div class="overflow-scroll">
+            <table class="w-full bg-white border border-gray-200">
+              <thead>
+                <tr>
+                  <th class="py-2 px-4 border-b">ID</th>
+                  <th class="py-2 px-4 border-b">Image</th>
+                  <th class="py-2 px-4 border-b">Name</th>
+                  <th class="py-2 px-4 border-b">Price</th>
+                  <th class="py-2 px-4 border-b">Speciality</th>
+                  <th class="py-2 px-4 border-b">Description</th>
+                  <th class="py-2 px-4 border-b">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Example row with additional fields -->
+                {% for therapist in therapist %}
+                <tr>
+                  <td class="py-2 px-4 border-b">{{therapist.id}}</td>
+                  <td class="py-2 px-4 border-b">
+                    {% if therapist.image %}
+                    <img
+                      src="{{ therapist.image.url }}"
+                      alt="Property Image"
+                      class="w-8 h-8 mr-2"
+                    />
+                    {% else %} No Image Available {% endif %}
+                  </td>
+                  <td class="py-2 px-4 border-b">{{therapist.name}}</td>
+                  <td class="py-2 px-4 border-b">{{therapist.price}}</td>
+                  <td class="py-2 px-4 border-b">{{therapist.speciality}}</td>
+                  <td class="py-2 px-4 border-b">{{therapist.description}}</td>
+                  <td class="py-2 px-4 border-b">
+                    <a href="/admin-edit-therapist/{{ therapist.id }}">
+                      <i
+                        id="openEditModal"
+                        class="uil uil-edit text-green-500 cursor-pointer hover:text-green-700"
+                      ></i>
+                    </a>
+                    <a
+                      href="/admin-delete-therapist/{{ therapist.id }}"
+                      type="submit"
+                      ><i
+                        class="uil uil-trash-alt text-red-500 cursor-pointer hover:text-red-700"
+                        data-property-id="{{ therapist.id }}"
+                      ></i>
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Modal -->
     <div
       id="myModal"
       class="modal hidden fixed inset-0 bg-gray-300 bg-opacity-75 flex items-center justify-center"
@@ -106,54 +106,56 @@
         <span id="closeModal" class="close">&times;</span>
 
         <!-- Property Add Form -->
-        <form id="propertyForm" class="grid grid-cols-2 gap-4">
+        <form
+          id="propertyForm"
+          action="{% url 'admin-teams-management' %}"
+          class="grid grid-cols-2 gap-4"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          {% csrf_token %}
           <div class="mb-4">
-            <label for="propertyName">Name:</label>
+            <label for="name">Name:</label>
             <input
               type="text"
-              id="propertyName"
-              name="propertyName"
+              id="name"
+              name="name"
               class="w-full border p-2"
               required
             />
           </div>
 
           <div class="mb-4">
-            <label for="propertyAddress">Price:</label>
+            <label for="price">Cost:</label>
             <input
-              type="text"
-              id="propertyAddress"
-              name="propertyAddress"
+              type="number"
+              id="price"
+              name="price"
               class="w-full border p-2"
               required
             />
           </div>
 
           <div class="mb-4">
-            <label for="propertyRooms">Speciality:</label>
+            <label for="speciality">Speciality:</label>
             <input
               type="text"
-              id="phone"
-              name="phone"
+              id="speciality"
+              name="speciality"
               class="w-full border p-2"
               required
             />
           </div>
 
           <div class="mb-4">
-            <label for="propertyDescription">Description:</label>
+            <label for="description">Description:</label>
             <textarea
-              id="propertyDescription"
-              name="propertyDescription"
+              id="description"
+              name="description"
               class="w-full border p-2"
               required
             ></textarea>
           </div>
-
-         
-
-         
-         
 
           <div class="mb-4">
             <!-- Add a file input for photos -->
@@ -161,9 +163,8 @@
             <input
               type="file"
               id="propertyPhotos"
-              name="propertyPhotos"
+              name="image"
               class="w-full border p-2"
-              multiple
             />
           </div>
 

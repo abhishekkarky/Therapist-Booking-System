@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import (authenticate, get_user_model, login, logout,
+                                 update_session_auth_hash)
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.files.storage import default_storage
 from django.contrib.auth import get_user_model, authenticate
 from Auth.models import Therapist, Booking
 
@@ -104,6 +106,7 @@ def teamsManagement(request):
             speciality=speciality,
             description=description
         )
+        print(image, name, price, speciality, description)
 
         try:
             therapist.save()
@@ -168,13 +171,10 @@ def booking(request):
     if request.method == 'POST':
         # Fetching therapist details from the request
         therapist_id = request.POST.get('therapist')
-        print("thjsdkghlkjsdghsdk", therapist_id)
         date = request.POST.get('date')
         time = request.POST.get('time')
         appointmentType = request.POST.get('appointmentType')
         note = request.POST.get('note')
-
-        print(therapist_id, date, time, appointmentType, note)
 
         try:
             # Check if the user is authenticated
@@ -204,14 +204,73 @@ def booking(request):
     else:
         return render(request, 'booking_page.html')
 
+
 def user_delete_booking(request, id):
     booking_delete = get_object_or_404(Booking, pk=id)
     booking_delete.delete()
     message = "Booking deleted successfully"
     messages.success(request, message)
-    return redirect('/bookinglist') 
+    return redirect('/bookinglist')
 
 
 def user_logout(request):
     logout(request)
     return redirect('/login')
+
+
+def profile(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            user = request.user
+            image = request.FILES.get("image")
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            number = request.POST.get('number')
+            user.name = name
+            user.email = email
+            user.number = number
+
+            if image:
+                user.image = image
+            user.save()
+            print(user)
+            return redirect('/profile_page')
+        else:
+            return redirect('/login')
+    if request.user.is_authenticated:
+        user = request.user
+        image = user.image
+        name = user.name
+        email = user.email
+        number = user.number
+        context = {
+            'image': image,
+            'name': name,
+            'email': email,
+            'number': number
+        }
+        return render(request, 'profile.html', context)
+    return render(request, 'profile.html', context)
+
+
+def changepassword(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            current_password = request.POST.get('current_password')
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+
+            if not request.user.check_password(current_password):
+                return render(request, 'changepassword.html', {'error_message': 'Current password is incorrect'})
+
+            if new_password != confirm_password:
+                return render(request, 'changepassword.html', {'error_message': 'New password and confirm password do not match'})
+
+            request.user.set_password(new_password)
+            request.user.save()
+
+            update_session_auth_hash(request, request.user)
+
+            return redirect('/profile_page')
+
+    return render(request, 'changepassword.html')

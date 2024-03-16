@@ -19,4 +19,12 @@ urlpatterns = [
     # path('admin_delete-booking<int:id>', views.admin_delete_booking, name='admin-delete-booking'),
     path('booking', views.booking, name='booking'),
     path('logout', views.user_logout, name='logout'),
+    
+    
+    
+    
+    
+    
+    path('profile_page', views.profile, name='profile_page'),
+    path('changepassword', views.changepassword, name='changepassword'),
 ]

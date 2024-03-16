@@ -56,16 +56,16 @@
         </p>
       </div>
 
-      <div class="flex flex-wrap justify-between">
+      <div class="flex flex-wrap justify-evenly">
         {% for therapist in therapist %}
-        <div
-          class="w-full xs:w-1/2 sm:w-2/2 md:w-2/4 lg:w-2/6 xl:w-2/6 mb-4 therapist-details"
-        >
+        <div class="w-1/4 flex flex-row flex-wrap therapist-details">
+          {% if therapist.image %}
           <img
-            src="{{therapist.image.url}}"
-            class="w-full h-64 object-cover mx-1"
-            alt="{{ therapist.name }}"
+            src="{{ therapist.image.url }}"
+            alt="Property Image"
+            class="w-[100%] h-[18rem] mr-2"
           />
+          {% else %} No Image Available {% endif %}
           <div class="therapist-hover-details">
             <h2 class="mb-2">{{therapist.name}}</h2>
             <p class="mb-2">{{therapist.speciality}}</p>
