@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bookings</title>
+    <link rel="stylesheet" href="/static/css/alert.css" />
+    <script src="/static/js/message.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -12,6 +14,21 @@
   </head>
 
   <body class="bg-gray-100">
+    {% if messages %} {% for message in messages %}
+    <div
+      class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
+      style="position: fixed; top: 0; right: 0; z-index: 9999"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %} {% endif %}
     <div class="container mx-auto px-4 md:px-10 py-4 md:py-7">
       <div class="flex items-center justify-between">
         <p
@@ -85,13 +102,10 @@
                 {{ booking.appointmentType }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <!-- Add delete button here if needed -->
-                <!-- Example: -->
                 <a href="{% url 'delete-booking' booking.id %}">Delete</a>
               </td>
             </tr>
-            <!-- {% endfor %} -->
-            <!-- Add more rows here if needed -->
+            {% endfor %}
           </tbody>
         </table>
       </div>

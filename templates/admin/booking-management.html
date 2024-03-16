@@ -1,76 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Appointment Management</title>
     <!----======== CSS ======== -->
     <link rel="stylesheet" href="/static/css/adminpanel.css" />
-
+    <link rel="stylesheet" href="/static/css/alert.css" />
+    <script src="/static/js/message.js"></script>
     <!----===== Iconscout CSS ===== -->
     <link
       rel="stylesheet"
       href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
     />
     <script src="https://cdn.tailwindcss.com"></script>
-
-</head>
-<body>
+  </head>
+  <body>
+    {% if messages %} {% for message in messages %}
+    <div
+      class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
+      style="position: fixed; top: 0; right: 0; z-index: 9999"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %} {% endif %}
     <!-- Include navbar.html -->
     {% include 'admin/navbar.html' %}
-    
-    <section class="dashboard">
-        <div class="top">
-            <i class="uil uil-bars sidebar-toggle"></i>
-            <div class="search-box">
-                <i class="uil uil-search"></i>
-                <input type="text" placeholder="Search here..." />
-            </div>
-            <img src="/static/images/profile.jpg" alt="" />
-        </div>
 
-        <div class="dash-content p-6">
-            <div class="overview">
-                <div class="title flex items-center justify-between mb-4">
-                    <div class="flex items-center">
-                        <i class="uil uil-tachometer-fast-alt text-2xl"></i>
-                        <span class="text-2xl ml-2">Appointments</span>
-                    </div>
-                </div>
-        
-                <!-- Table with property data -->
-                <table class="w-full bg-white border border-gray-200">
-                    <thead>
-                        <tr>
-                            <th class="py-2 px-4 border-b">ID</th>
-                            <th class="py-2 px-4 border-b">User</th>
-                            <th class="py-2 px-4 border-b">Therapist Name</th>
-                            <th class="py-2 px-4 border-b">Date</th>
-                            <th class="py-2 px-4 border-b">Time</th>
-                            <th class="py-2 px-4 border-b">Appointment Type</th>
-                            <th class="py-2 px-4 border-b">Note</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Example row with additional fields -->
-                        <tr>
-                            <td class="py-2 px-4 border-b">1</td>
-                            <td class="py-2 px-4 border-b">Patient Name</td>
-                            <td class="py-2 px-4 border-b">Therapist Name</td>
-                            <td class="py-2 px-4 border-b">Date</td>
-                            <td class="py-2 px-4 border-b">Time</td>
-                            <td class="py-2 px-4 border-b">Appointment Type</td>
-                            <td class="py-2 px-4 border-b">Note</td>                           
-                            
-                        </tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
-            </div>
+    <section class="dashboard">
+      <div class="top">
+        <i class="uil uil-bars sidebar-toggle"></i>
+        <div class="search-box">
+          <i class="uil uil-search"></i>
+          <input type="text" placeholder="Search here..." />
         </div>
+        <img src="/static/images/profile.jpg" alt="" />
+      </div>
+
+      <div class="dash-content p-6">
+        <div class="overview">
+          <div class="title flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <i class="uil uil-tachometer-fast-alt text-2xl"></i>
+              <span class="text-2xl ml-2">Appointments</span>
+            </div>
+          </div>
+
+          <div class="class">
+            <table class="w-full bg-white border border-gray-200">
+              <thead>
+                <tr>
+                  <th class="py-2 px-4 border-b">Therapist</th>
+                  <th class="py-2 px-4 border-b">Date</th>
+                  <th class="py-2 px-4 border-b">Time</th>
+                  <th class="py-2 px-4 border-b">Note</th>
+                  <th class="py-2 px-4 border-b">Appointment Type</th>
+                  <th class="py-2 px-4 border-b">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for booking in bookings %}
+                <tr>
+                  <td class="py-2 px-4 border-b">
+                    {{ booking.therapist.name }}
+                  </td>
+                  <td class="py-2 px-4 border-b">{{ booking.date }}</td>
+                  <td class="py-2 px-4 border-b">{{ booking.time }}</td>
+                  <td class="py-2 px-4 border-b">{{ booking.note }}</td>
+                  <td class="py-2 px-4 border-b">
+                    {{ booking.appointmentType }}
+                  </td>
+                  <td class="py-2 px-4 border-b">
+                    <a href="{% url 'delete-booking' booking.id %}">Delete</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Include admin-panel.js -->
     <script src="/static/js/admin-panel.js"></script>
-</body>
+  </body>
 </html>

@@ -8,6 +8,10 @@ from django.contrib.auth import get_user_model, authenticate
 from Auth.models import Therapist, Booking
 
 
+def home(request):
+    return render(request, 'home.html')
+
+
 def user_login(request):
     if request.method == 'POST':
         number = request.POST['number']
@@ -49,32 +53,22 @@ def register(request):
 
     return render(request, 'register.html')
 
-# @login_required
-
 
 def about(request):
     therapist = Therapist.objects.all()
     return render(request, 'about.html', {'therapist': therapist})
 
-# @login_required
-
 
 def services(request):
     return render(request, 'services.html')
-
-# @login_required
 
 
 def FAQ(request):
     return render(request, 'FAQ.html')
 
-# @login_required
-
 
 def contect(request):
     return render(request, 'contact.html')
-
-# @login_required
 
 
 def individual(request, id):
@@ -83,78 +77,107 @@ def individual(request, id):
 
 
 def adminPage(request):
-    return render(request, 'admin/admin-panel.html')
+    if request.user.is_admin:
+        return render(request, 'admin/admin-panel.html')
+    else:
+        messages.error(
+            request, "You do not have permission to access this page.")
+        return redirect('dashboard')
 
 
 def bookingManagement(request):
-    return render(request, 'admin/booking-management.html')
+    if request.user.is_admin:
+        bookings = Booking.objects.all()
+        context = {
+            'bookings': bookings
+        }
+        return render(request, 'admin/booking-management.html', context)
+    else:
+        messages.error(
+            request, "You do not have permission to access this page.")
+        return redirect('dashboard')
 
 
 def teamsManagement(request):
-    therapist = Therapist.objects.all()
-    if request.method == 'POST':
-        image = request.FILES.get("image")
-        name = request.POST.get("name")
-        price = request.POST.get("price")
-        speciality = request.POST.get("speciality")
-        description = request.POST.get("description")
+    if request.user.is_admin:
+        therapist = Therapist.objects.all()
+        if request.method == 'POST':
+            image = request.FILES.get("image")
+            name = request.POST.get("name")
+            price = request.POST.get("price")
+            speciality = request.POST.get("speciality")
+            description = request.POST.get("description")
 
-        therapist = Therapist(
-            image=image,
-            name=name,
-            price=price,
-            speciality=speciality,
-            description=description
-        )
-        print(image, name, price, speciality, description)
+            therapist = Therapist(
+                image=image,
+                name=name,
+                price=price,
+                speciality=speciality,
+                description=description
+            )
+            print(image, name, price, speciality, description)
 
-        try:
-            therapist.save()
-            message = "Therapist added successfully"
-            messages.success(request, message)
-            return redirect('/admin-teams-management')
-        except Exception as e:
-            message = "Couldn't add therapist. Please try again later."
-            messages.error(request, message)
-            print(e)
+            try:
+                therapist.save()
+                message = "Therapist added successfully"
+                messages.success(request, message)
+                return redirect('/admin-teams-management')
+            except Exception as e:
+                message = "Couldn't add therapist. Please try again later."
+                messages.error(request, message)
+                print(e)
 
-    return render(request, 'admin/teams-management.html', {'therapist': therapist})
+        return render(request, 'admin/teams-management.html', {'therapist': therapist})
+    else:
+        messages.error(
+            request, "You do not have permission to access this page.")
+        return redirect('dashboard')
 
 
 def editTherapist(request, therapist_id):
-    details = get_object_or_404(Therapist, id=therapist_id)
+    if request.user.is_admin:
+        details = get_object_or_404(Therapist, id=therapist_id)
 
-    if request.method == 'POST':
-        # Retrieve existing therapist instance
-        therapist = Therapist.objects.get(pk=therapist_id)
+        if request.method == 'POST':
+            # Retrieve existing therapist instance
+            therapist = Therapist.objects.get(pk=therapist_id)
 
-        # Update fields with new values
-        therapist.image = request.FILES.get("image")
-        therapist.name = request.POST.get("name")
-        therapist.price = request.POST.get("price")
-        therapist.speciality = request.POST.get("speciality")
-        therapist.description = request.POST.get("description")
+            # Update fields with new values
+            therapist.image = request.FILES.get("image")
+            therapist.name = request.POST.get("name")
+            therapist.price = request.POST.get("price")
+            therapist.speciality = request.POST.get("speciality")
+            therapist.description = request.POST.get("description")
 
-        try:
-            # Save the updated therapist
-            therapist.save()
+            try:
+                # Save the updated therapist
+                therapist.save()
 
-            message = "Therapist edited successfully"
-            messages.success(request, message)
-            return redirect('/admin-teams-management')
-        except Exception as e:
-            message = "Couldn't edit therapist. Please try again later."
-            messages.error(request, message)
-            print(e)
-    return render(request, 'admin/edit_therapist.html', {'details': details})
+                message = "Therapist edited successfully"
+                messages.success(request, message)
+                return redirect('/admin-teams-management')
+            except Exception as e:
+                message = "Couldn't edit therapist. Please try again later."
+                messages.error(request, message)
+                print(e)
+        return render(request, 'admin/edit_therapist.html', {'details': details})
+    else:
+        messages.error(
+            request, "You do not have permission to access this page.")
+        return redirect('dashboard')
 
 
 def deleteTherapist(request, therapist_id):
-    therapist_obj = get_object_or_404(Therapist, pk=therapist_id)
-    therapist_obj.delete()
-    message = "Therapist deleted successfully"
-    messages.success(request, message)
-    return redirect('/admin-teams-management')
+    if request.user.is_admin:
+        therapist_obj = get_object_or_404(Therapist, pk=therapist_id)
+        therapist_obj.delete()
+        message = "Therapist deleted successfully"
+        messages.success(request, message)
+        return redirect('/admin-teams-management')
+    else:
+        messages.error(
+            request, "You do not have permission to access this page.")
+        return redirect('dashboard')
 
 
 def bookinglist(request):

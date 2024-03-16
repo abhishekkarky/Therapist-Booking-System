@@ -8,7 +8,8 @@
 
     <!----======== CSS ======== -->
     <link rel="stylesheet" href="/static/css/adminpanel.css" />
-
+    <link rel="stylesheet" href="/static/css/alert.css" />
+    <script src="/static/js/message.js"></script>
     <!----===== Iconscout CSS ===== -->
     <link
       rel="stylesheet"
@@ -16,12 +17,25 @@
     />
     <script src="https://cdn.tailwindcss.com"></script>
 
-
     <title>Admin Dashboard Panel</title>
   </head>
   <body>
-    {% include 'admin/navbar.html' %}
-    
+    {% if messages %} {% for message in messages %}
+    <div
+      class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
+      style="position: fixed; top: 0; right: 0; z-index: 9999"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %} {% endif %} {% include 'admin/navbar.html' %}
+
     <section class="dashboard">
       <div class="top">
         <i class="uil uil-bars sidebar-toggle"></i>
@@ -59,8 +73,6 @@
             </div>
           </div>
         </div>
-
-      
       </div>
     </section>
 

@@ -5,8 +5,6 @@ from django.shortcuts import redirect, render
 from Home.models import ContactList
 
 
-# Create your views here.
-# @login_required
 def home(request):
     return render(request, 'home.html')
 

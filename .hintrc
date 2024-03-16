@@ -10,6 +10,12 @@
       {
         "nested-interactive": "off"
       }
+    ],
+    "axe/forms": [
+      "default",
+      {
+        "label": "off"
+      }
     ]
   }
 }
