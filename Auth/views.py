@@ -13,6 +13,9 @@ def home(request):
 
 
 def user_login(request):
+    if request.user.is_authenticated:
+        return redirect('/')
+    
     if request.method == 'POST':
         number = request.POST['number']
         password = request.POST['password']
@@ -77,7 +80,7 @@ def individual(request, id):
 
 
 def adminPage(request):
-    if request.user.is_admin:
+    if (request.user.is_authenticated and request.user.is_admin):
         return render(request, 'admin/admin-panel.html')
     else:
         messages.error(
@@ -86,7 +89,7 @@ def adminPage(request):
 
 
 def bookingManagement(request):
-    if request.user.is_admin:
+    if (request.user.is_authenticated and request.user.is_admin):
         bookings = Booking.objects.all()
         context = {
             'bookings': bookings
@@ -99,7 +102,7 @@ def bookingManagement(request):
 
 
 def teamsManagement(request):
-    if request.user.is_admin:
+    if (request.user.is_authenticated and request.user.is_admin):
         therapist = Therapist.objects.all()
         if request.method == 'POST':
             image = request.FILES.get("image")
@@ -135,7 +138,7 @@ def teamsManagement(request):
 
 
 def editTherapist(request, therapist_id):
-    if request.user.is_admin:
+    if (request.user.is_authenticated and request.user.is_admin):
         details = get_object_or_404(Therapist, id=therapist_id)
 
         if request.method == 'POST':
@@ -168,7 +171,7 @@ def editTherapist(request, therapist_id):
 
 
 def deleteTherapist(request, therapist_id):
-    if request.user.is_admin:
+    if (request.user.is_authenticated and request.user.is_admin):
         therapist_obj = get_object_or_404(Therapist, pk=therapist_id)
         therapist_obj.delete()
         message = "Therapist deleted successfully"
@@ -192,7 +195,6 @@ def bookinglist(request):
 @login_required
 def booking(request):
     if request.method == 'POST':
-        # Fetching therapist details from the request
         therapist_id = request.POST.get('therapist')
         date = request.POST.get('date')
         time = request.POST.get('time')
@@ -200,13 +202,10 @@ def booking(request):
         note = request.POST.get('note')
 
         try:
-            # Check if the user is authenticated
             if request.user.is_authenticated:
-                # Retrieving the therapist instance using the therapist_id
                 therapist_instance = get_object_or_404(
                     Therapist, id=therapist_id)
 
-                # Creating a Booking instance with the fetched therapist instance and the user
                 booking = Booking(
                     user=request.user, therapist=therapist_instance, date=date, appointmentType=appointmentType, note=note)
                 booking.save()
@@ -245,20 +244,19 @@ def profile(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
             user = request.user
-            image = request.FILES.get("image")
             name = request.POST.get('name')
             email = request.POST.get('email')
             number = request.POST.get('number')
             user.name = name
             user.email = email
             user.number = number
-
-            if image:
-                user.image = image
+            if request.FILES.get("image"): 
+                user.image = request.FILES.get("image")
             user.save()
-            print(user)
+            messages.success(request, "Your Profile has been updated successfully")
             return redirect('/profile_page')
         else:
+            messages.error(request, "Something went wrong")
             return redirect('/login')
     if request.user.is_authenticated:
         user = request.user
