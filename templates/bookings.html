@@ -102,7 +102,16 @@
                 {{ booking.appointmentType }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <a href="{% url 'delete-booking' booking.id %}">Delete</a>
+                <a
+                  href="/edit-booking/{{ booking.id }}"
+                  class="bg-[#e77450] hover:bg-black hover:bg-white hover:text-[#e77450] text-white font-bold p-2 border rounded"
+                  >Edit</a
+                >
+                <a
+                  class="bg-red-500 hover:bg-white hover:text-red-500 text-white font-bold p-2 border rounded"
+                  href="{% url 'delete-booking' booking.id %}"
+                  >Delete</a
+                >
               </td>
             </tr>
             {% endfor %}
@@ -110,5 +119,15 @@
         </table>
       </div>
     </div>
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        var alert = document.querySelector(".alert");
+        if (alert) {
+          setTimeout(function () {
+            alert.style.display = "none";
+          }, 3000);
+        }
+      });
+    </script>
   </body>
 </html>

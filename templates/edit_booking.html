@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Therapist Management</title>
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="/static/css/adminpanel.css" />
+    <link rel="stylesheet" href="/static/css/alert.css" />
+    <script src="/static/js/message.js"></script>
+    <!----===== Iconscout CSS ===== -->
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    {% if messages %} {% for message in messages %}
+    <div
+      class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
+      style="position: fixed; top: 0; right: 0; z-index: 9999"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %} {% endif %}
+    <!-- Modal -->
+    <div
+      id="myModal"
+      class="modal fixed inset-0 bg-gray-300 bg-opacity-75 flex items-center justify-center"
+    >
+      <div class="bg-white p-6 w-1/2">
+        <!-- Property Add Form -->
+
+        <form
+        id="appointmentForm"
+        action="{% url 'edit-booking' booking.id %}"
+        class="grid grid-cols-2 gap-4"
+        method="post"
+    >
+          {% csrf_token %}
+
+          <div class="mb-4">
+            <label for="appointmentDate">Theparist Name:</label>
+            <input
+              disabled
+              value="{{booking.therapist.name}}"
+              id="appointmentDate"
+              class="w-full border p-2"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="appointmentDate">Session Price:</label>
+            <input
+              disabled
+              value="{{booking.therapist.price}}"
+              id="appointmentDate"
+              class="w-full border p-2"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="appointmentDate">Date:</label>
+            <input
+              type="date"
+              value="{{ booking.date|date:'Y-m-d' }}"
+              id="appointmentDate"
+              name="date"
+              class="w-full border p-2"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="appointmentTime">Time:</label>
+            <input
+              type="time"
+              id="appointmentTime"
+              name="time"
+              value="{{ booking.time }}"
+              class="w-full border p-2"
+              required />
+          </div>
+          <div class="mb-4">
+            <label for="appointmentType">Appointment Type:</label>
+            <select
+                id="appointmentType"
+                name="appointmentType"
+                class="w-full border p-2"
+                required
+            >
+                <option value="Physical" {% if booking.appointmentType == 'Physical' %} selected {% endif %}>Physical</option>
+                <option value="Virtual" {% if booking.appointmentType == 'Virtual' %} selected {% endif %}>Virtual</option>
+            </select>
+        </div>
+
+          <div class="mb-4">
+            <label for="appointmentDescription">Additional Notes:</label>
+            <textarea
+              id="appointmentDescription"
+              name="note"
+              class="w-full border p-2"
+            >{{ booking.note }}
+          </textarea>
+          </div>
+          <input type="hidden" name="therapist" value="{{ booking.therapist_id }}">
+          <button
+            type="submit"
+            class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded"
+          >
+            Book Appointment
+          </button>
+          <a
+            href="/bookinglist"
+            class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded text-center"
+          >
+            Back to Bookings
+          </a>
+        </form>
+      </div>
+    </div>
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        var alert = document.querySelector(".alert");
+        if (alert) {
+          setTimeout(function () {
+            alert.style.display = "none";
+          }, 3000);
+        }
+      });
+    </script>
+  </body>
+</html>

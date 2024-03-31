@@ -15,7 +15,7 @@ def home(request):
 def user_login(request):
     if request.user.is_authenticated:
         return redirect('/')
-    
+
     if request.method == 'POST':
         number = request.POST['number']
         password = request.POST['password']
@@ -207,7 +207,7 @@ def booking(request):
                     Therapist, id=therapist_id)
 
                 booking = Booking(
-                    user=request.user, therapist=therapist_instance, date=date, appointmentType=appointmentType, note=note)
+                    user=request.user, therapist=therapist_instance, date=date, appointmentType=appointmentType, note=note, time=time)
                 booking.save()
 
                 message = "Booking added successfully!!"
@@ -225,6 +225,44 @@ def booking(request):
             return redirect('/booking')
     else:
         return render(request, 'booking_page.html')
+
+
+@login_required
+def user_edit_booking(request, id):
+    booking = get_object_or_404(Booking, pk=id)
+    if booking.user != request.user:
+        message = "You are not authorized to edit this booking."
+        messages.error(request, message)
+        return redirect('/bookinglist')
+
+    if request.method == 'POST':
+        try:
+            therapist_id = request.POST.get('therapist')
+            date = request.POST.get('date')
+            time = request.POST.get('time')
+            appointmentType = request.POST.get('appointmentType')
+            note = request.POST.get('note')
+
+            booking.date = date
+            booking.time = time
+            booking.appointmentType = appointmentType
+            booking.note = note
+            booking.therapist_id = therapist_id
+            booking.user_id = request.user
+
+
+            booking.save()
+
+            message = "Booking updated successfully"
+            messages.success(request, message)
+            return redirect('/bookinglist')
+        except Exception as e:
+            message = "Couldn't process your request!! Please try again later."
+            messages.error(request, message)
+            print(e)
+            return redirect('/bookinglist')
+    else:
+        return render(request, 'edit_booking.html', {'booking': booking})
 
 
 def user_delete_booking(request, id):
@@ -250,10 +288,11 @@ def profile(request):
             user.name = name
             user.email = email
             user.number = number
-            if request.FILES.get("image"): 
+            if request.FILES.get("image"):
                 user.image = request.FILES.get("image")
             user.save()
-            messages.success(request, "Your Profile has been updated successfully")
+            messages.success(
+                request, "Your Profile has been updated successfully")
             return redirect('/profile_page')
         else:
             messages.error(request, "Something went wrong")
