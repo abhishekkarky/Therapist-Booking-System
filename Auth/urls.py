@@ -23,4 +23,7 @@ urlpatterns = [
     path('logout', views.user_logout, name='logout'),
     path('profile_page', views.profile, name='profile_page'),
     path('changepassword', views.changepassword, name='changepassword'),
+    path('payment_success', views.payment_successful, name='payment_successful'),
+    path('payment_failure', views.payment_cancelled, name='payment_cancelled'),
+    path('stripe_webhook', views.stripe_webhook, name='stripe_webhook')
 ]

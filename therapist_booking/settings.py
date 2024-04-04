@@ -12,9 +12,15 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+import pymysql
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+STRIPE_SECRET_KEY_TEST="sk_test_51P1lOZ06ho0W5mPfHhr4drqVtm8P1AwXs4vaJc5fuG5lJdCiZSPWusgTNVFBIVqpTOHXCX2zUAJe3rF4RBlcIPUY00kiP8S4oq"
+REDIRECT_DOMAIN=os.environ.get('http://127.0.0.1:7000/')
+STRIPE_SECRET_KEY_TEST = os.environ.get('STRIPE_SECRET_KEY_TEST')
 
 
 # Quick-start development settings - unsuitable for production
@@ -82,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'therapists_booking',
         'USER': 'root',
-        'PASSWORD': 'user',
+        'PASSWORD': 'abhishek',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {

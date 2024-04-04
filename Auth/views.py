@@ -1,11 +1,17 @@
-from django.shortcuts import render, redirect, get_object_or_404
+import time
+
+import stripe
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import (authenticate, get_user_model, login, logout,
                                  update_session_auth_hash)
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.core.files.storage import default_storage
-from django.contrib.auth import get_user_model, authenticate
-from Auth.models import Therapist, Booking
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.csrf import csrf_exempt
+
+from Auth.models import Booking, Payment, Therapist
 
 
 def home(request):
@@ -191,40 +197,100 @@ def bookinglist(request):
     }
     return render(request, 'bookings.html', context)
 
-
 @login_required
 def booking(request):
+    stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
+    
     if request.method == 'POST':
         therapist_id = request.POST.get('therapist')
         date = request.POST.get('date')
         time = request.POST.get('time')
         appointmentType = request.POST.get('appointmentType')
         note = request.POST.get('note')
-
+        
         try:
-            if request.user.is_authenticated:
-                therapist_instance = get_object_or_404(
-                    Therapist, id=therapist_id)
-
-                booking = Booking(
-                    user=request.user, therapist=therapist_instance, date=date, appointmentType=appointmentType, note=note, time=time)
-                booking.save()
-
-                message = "Booking added successfully!!"
-                messages.success(request, message)
-                print(messages.success(request, message))
-                return redirect('/about')
-            else:
-                message = "User is not authenticated"
-                messages.error(request, message)
-                return redirect('/login')
+            therapist_instance = get_object_or_404(Therapist, id=therapist_id)
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[
+                    {
+                        'price': therapist_instance.price_id, 
+                        'quantity': 1
+                    }
+                ],
+                mode='payment',
+                customer_creation='always',
+                success_url=settings.REDIRECT_DOMAIN + '/payment_successful?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=settings.REDIRECT_DOMAIN + '/payment_cancelled?session_id={CHECKOUT_SESSION_ID}',
+            )
+            return redirect(checkout_session.url, code=303)
         except Exception as e:
-            message = "Couldn't process your request!! Please try again later."
-            messages.error(request, message)
+            messages.error(request, "Couldn't process your request!! Please try again later.")
             print(e)
             return redirect('/booking')
-    else:
-        return render(request, 'booking_page.html')
+    return render(request, 'booking_page.html')
+
+def payment_successful(request):
+    stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
+    checkout_session_id = request.GET.get('session_id', None)
+    
+    try:
+        session = stripe.checkout.Session.retrieve(checkout_session_id)
+        customer = stripe.Customer.retrieve(session.customer)
+    except Exception as e:
+        messages.error(request, "Error retrieving payment information.")
+        print(e)
+        return redirect('/booking')
+    
+    try:
+        user_payment = Payment.objects.get(user=request.user)
+        user_payment.stripe_checkout_id = checkout_session_id
+        user_payment.save()
+    except Payment.DoesNotExist:
+        messages.error(request, "Payment information not found.")
+        return redirect('/booking')
+
+    # Save booking details after payment is successful
+    therapist_id = request.session.get('therapist_id')
+    date = request.session.get('date')
+    time = request.session.get('time')
+    appointmentType = request.session.get('appointmentType')
+    note = request.session.get('note')
+
+    therapist_instance = get_object_or_404(Therapist, id=therapist_id)
+    booking = Booking(user=request.user, therapist=therapist_instance, date=date, appointmentType=appointmentType, note=note, time=time)
+    booking.save()
+
+    return render(request, 'booking_page.html', {'customer': customer})
+
+def payment_cancelled(request):
+    return render(request, 'individual_therapist.html')
+
+@csrf_exempt
+def stripe_webhook(request):
+    stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
+    time.sleep(10)
+    payload = request.body
+    signature_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, signature_header, settings.STRIPE_WEBHOOK_SECRECT_TEST
+        )
+    except ValueError as e:
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        return HttpResponse(status=400)
+    
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        session_id = session.get('id', None)
+        time.sleep(15) 
+        user_payment = Payment.objects.get(stripe_checkout_id=session_id)
+        line_items = stripe.checkout.Session.list_line_items(session_id, limit=1)
+        user_payment.payment_bool = True
+        user_payment.save()
+        return HttpResponse(status=200)
 
 
 @login_required
@@ -334,3 +400,4 @@ def changepassword(request):
             return redirect('/profile_page')
 
     return render(request, 'changepassword.html')
+

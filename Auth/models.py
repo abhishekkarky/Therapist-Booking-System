@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 class CustomUser(AbstractUser):
@@ -39,3 +41,13 @@ class Booking(models.Model):
     time = models.TextField(blank=True, null=True)
     appointmentType = models.CharField(max_length=100)
     note = models.TextField(blank=True, null=True)
+
+class Payment(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    payment_bool = models.BooleanField(default=False)
+    stripe_checkout_id = models.CharField(max_length=500)
+
+@receiver(post_save, sender = Payment)
+def create_user_payment(sender, instance, created, **kwargs):
+    if created:
+        Payment.objects.create(user=instance)
