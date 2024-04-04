@@ -1,5 +1,4 @@
 import time
-
 import stripe
 from django.conf import settings
 from django.contrib import messages
@@ -11,7 +10,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
-from Auth.models import Booking, Payment, Therapist
+from Auth.models import Booking, Payment, Therapist, CustomUser
 
 
 def home(request):
@@ -197,31 +196,35 @@ def bookinglist(request):
     }
     return render(request, 'bookings.html', context)
 
+stripe.api_key = 'sk_test_51P1lOZ06ho0W5mPfHhr4drqVtm8P1AwXs4vaJc5fuG5lJdCiZSPWusgTNVFBIVqpTOHXCX2zUAJe3rF4RBlcIPUY00kiP8S4oq'
+
 @login_required
 def booking(request):
-    stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
     
     if request.method == 'POST':
         therapist_id = request.POST.get('therapist')
-        date = request.POST.get('date')
-        time = request.POST.get('time')
-        appointmentType = request.POST.get('appointmentType')
-        note = request.POST.get('note')
         
         try:
             therapist_instance = get_object_or_404(Therapist, id=therapist_id)
+            price = stripe.Price.create(
+                unit_amount=5000, 
+                currency='usd',
+                product='prod_PrXMqQakxRxCcx',  
+                recurring=None,
+            )
+
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
                 line_items=[
                     {
-                        'price': therapist_instance.price_id, 
+                        'price': price.id, 
                         'quantity': 1
                     }
                 ],
                 mode='payment',
                 customer_creation='always',
-                success_url=settings.REDIRECT_DOMAIN + '/payment_successful?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=settings.REDIRECT_DOMAIN + '/payment_cancelled?session_id={CHECKOUT_SESSION_ID}',
+                success_url='http://127.0.0.1:7000/payment_successful?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url='http://127.0.0.1:7000/payment_cancelled?session_id={CHECKOUT_SESSION_ID}',
             )
             return redirect(checkout_session.url, code=303)
         except Exception as e:
@@ -231,35 +234,52 @@ def booking(request):
     return render(request, 'booking_page.html')
 
 def payment_successful(request):
-    stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
     checkout_session_id = request.GET.get('session_id', None)
-    
+    print(checkout_session_id)
     try:
         session = stripe.checkout.Session.retrieve(checkout_session_id)
         customer = stripe.Customer.retrieve(session.customer)
+
+        # therapist_id = request.session.get('therapist_id')
+        # date = request.session.get('date')
+        # time = request.session.get('time')
+        # appointmentType = request.session.get('appointmentType')
+        # note = request.session.get('note')
+
+        # therapist_instance = get_object_or_404(Therapist, id=therapist_id)
+        # booking = Booking(user=request.user, therapist=therapist_instance, date=date, appointmentType=appointmentType, note=note, time=time)
+        # booking.save()
+        user_instance = get_object_or_404(CustomUser, id=request.user.id)
+        user_payment = Payment.objects.create(
+            user=user_instance.id,
+            payment_bool = True,
+            stripe_checkout_id = checkout_session_id
+        )
+        
+        user_payment.save()
     except Exception as e:
         messages.error(request, "Error retrieving payment information.")
         print(e)
         return redirect('/booking')
     
-    try:
-        user_payment = Payment.objects.get(user=request.user)
-        user_payment.stripe_checkout_id = checkout_session_id
-        user_payment.save()
-    except Payment.DoesNotExist:
-        messages.error(request, "Payment information not found.")
-        return redirect('/booking')
+    # try:
+    #     therapist_id = request.session.get('therapist_id')
+    #     date = request.session.get('date')
+    #     time = request.session.get('time')
+    #     appointmentType = request.session.get('appointmentType')
+    #     note = request.session.get('note')
 
-    # Save booking details after payment is successful
-    therapist_id = request.session.get('therapist_id')
-    date = request.session.get('date')
-    time = request.session.get('time')
-    appointmentType = request.session.get('appointmentType')
-    note = request.session.get('note')
+    #     therapist_instance = get_object_or_404(Therapist, id=therapist_id)
+    #     booking = Booking(user=request.user, therapist=therapist_instance, date=date, appointmentType=appointmentType, note=note, time=time)
+    #     booking.save()
 
-    therapist_instance = get_object_or_404(Therapist, id=therapist_id)
-    booking = Booking(user=request.user, therapist=therapist_instance, date=date, appointmentType=appointmentType, note=note, time=time)
-    booking.save()
+    #     user_payment = Payment.objects.get(user=request.user)
+    #     user_payment.stripe_checkout_id = checkout_session_id
+    #     user_payment.save()
+    # except Exception as e:
+    #     messages.error(request, "Error saving booking details.")
+    #     print(e)
+        # return redirect('/booking')
 
     return render(request, 'booking_page.html', {'customer': customer})
 
