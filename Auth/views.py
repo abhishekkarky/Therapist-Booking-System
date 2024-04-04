@@ -9,6 +9,7 @@ from django.core.files.storage import default_storage
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
+from django.db import transaction
 
 from Auth.models import Booking, Payment, Therapist, CustomUser
 
@@ -203,11 +204,21 @@ def booking(request):
     
     if request.method == 'POST':
         therapist_id = request.POST.get('therapist')
+        date = request.POST.get('date')
+        time = request.POST.get('time')
+        appointmentType = request.POST.get('appointmentType')
+        note = request.POST.get('note')
+
+        request.session['therapist'] = therapist_id
+        request.session['date'] = date
+        request.session['time'] = time
+        request.session['appointmentType'] = appointmentType
+        request.session['note'] = note
         
         try:
             therapist_instance = get_object_or_404(Therapist, id=therapist_id)
             price = stripe.Price.create(
-                unit_amount=5000, 
+                unit_amount=therapist_instance.price, 
                 currency='usd',
                 product='prod_PrXMqQakxRxCcx',  
                 recurring=None,
@@ -235,53 +246,41 @@ def booking(request):
 
 def payment_successful(request):
     checkout_session_id = request.GET.get('session_id', None)
-    print(checkout_session_id)
+    therapist_id = request.session.get('therapist')
+    date = request.session.get('date')
+    time = request.session.get('time')
+    appointmentType = request.session.get('appointmentType')
+    note = request.session.get('note')
+    
     try:
         session = stripe.checkout.Session.retrieve(checkout_session_id)
         customer = stripe.Customer.retrieve(session.customer)
-
-        # therapist_id = request.session.get('therapist_id')
-        # date = request.session.get('date')
-        # time = request.session.get('time')
-        # appointmentType = request.session.get('appointmentType')
-        # note = request.session.get('note')
-
-        # therapist_instance = get_object_or_404(Therapist, id=therapist_id)
-        # booking = Booking(user=request.user, therapist=therapist_instance, date=date, appointmentType=appointmentType, note=note, time=time)
-        # booking.save()
-        user_instance = get_object_or_404(CustomUser, id=request.user.id)
-        user_payment = Payment.objects.create(
-            user=user_instance.id,
-            payment_bool = True,
-            stripe_checkout_id = checkout_session_id
-        )
-        
-        user_payment.save()
+        with transaction.atomic():
+            user_payment = Payment.objects.create(
+                user=request.user,
+                payment_bool=True,
+                stripe_checkout_id=checkout_session_id
+            )
+            user_payment.save()
+            
+            therapist_instance = get_object_or_404(Therapist, id=therapist_id)
+            booking = Booking.objects.create(
+                user=request.user,
+                therapist=therapist_instance,
+                date=date,
+                appointmentType=appointmentType,
+                note=note,
+                time=time,
+                isPaid=True
+            )
+            booking.save()
     except Exception as e:
-        messages.error(request, "Error retrieving payment information.")
         print(e)
-        return redirect('/booking')
-    
-    # try:
-    #     therapist_id = request.session.get('therapist_id')
-    #     date = request.session.get('date')
-    #     time = request.session.get('time')
-    #     appointmentType = request.session.get('appointmentType')
-    #     note = request.session.get('note')
+        messages.error(request, "Payment unsuccessful. Please try again later.")
+        return redirect('/bookinglist')
 
-    #     therapist_instance = get_object_or_404(Therapist, id=therapist_id)
-    #     booking = Booking(user=request.user, therapist=therapist_instance, date=date, appointmentType=appointmentType, note=note, time=time)
-    #     booking.save()
-
-    #     user_payment = Payment.objects.get(user=request.user)
-    #     user_payment.stripe_checkout_id = checkout_session_id
-    #     user_payment.save()
-    # except Exception as e:
-    #     messages.error(request, "Error saving booking details.")
-    #     print(e)
-        # return redirect('/booking')
-
-    return render(request, 'booking_page.html', {'customer': customer})
+    messages.success(request, "Payment successful. Your booking is confirmed.")
+    return redirect('/bookinglist')
 
 def payment_cancelled(request):
     return render(request, 'individual_therapist.html')
@@ -421,3 +420,49 @@ def changepassword(request):
 
     return render(request, 'changepassword.html')
 
+
+# def payment_successful(request):
+#     checkout_session_id = request.GET.get('session_id', None)
+#     therapist_id = request.session.get('therapist')
+#     date = request.session.get('date')
+#     time = request.session.get('time')
+#     appointmentType = request.session.get('appointmentType')
+#     note = request.session.get('note')
+    
+#     try:
+#         # Retrieve Stripe session and customer
+#         session = stripe.checkout.Session.retrieve(checkout_session_id)
+#         customer = stripe.Customer.retrieve(session.customer)
+        
+#         # Save payment
+#         with transaction.atomic():
+#             user_instance = get_object_or_404(CustomUser, id=request.user.id)
+#             user_payment = Payment.objects.create(
+#                 user=user_instance,
+#                 payment_bool=True,
+#                 stripe_checkout_id=checkout_session_id
+#             )
+#             user_payment.save()
+            
+#             # Save booking
+#             therapist_instance = get_object_or_404(Therapist, id=therapist_id)
+#             booking = Booking.objects.create(
+#                 user=request.user,
+#                 therapist=therapist_instance,
+#                 date=date,
+#                 appointmentType=appointmentType,
+#                 note=note,
+#                 time=time,
+#                 isPaid=True
+#             )
+#             booking.save()
+#     except Exception as e:
+#         # Log the error
+#         print(e)
+#         # Provide feedback to the user
+#         messages.error(request, "Payment unsuccessful. Please try again later.")
+#         return redirect('/bookinglist')
+
+#     # Provide feedback to the user
+#     messages.success(request, "Payment successful. Your booking is confirmed.")
+#     return redirect('/bookinglist')
