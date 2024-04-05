@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'therapists_booking',
         'USER': 'root',
-        'PASSWORD': 'abhishek',
+        'PASSWORD': 'user',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {

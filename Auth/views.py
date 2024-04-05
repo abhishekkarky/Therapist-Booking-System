@@ -15,12 +15,21 @@ from Auth.models import Booking, Payment, Therapist, CustomUser
 
 
 def home(request):
+    if request.user.is_authenticated:
+        if request.user.is_admin:
+            messages.error(request, 'You donot have access to this page.')
+            return redirect('/admin-page')
+
     return render(request, 'home.html')
 
 
 def user_login(request):
     if request.user.is_authenticated:
-        return redirect('/')
+        messages.error(request, 'You are already logged In.')
+        if request.user.is_admin:
+            return redirect('/admin-page')
+        else:
+            return redirect('/')
 
     if request.method == 'POST':
         number = request.POST['number']
@@ -42,6 +51,13 @@ def user_login(request):
 
 
 def register(request):
+    if request.user.is_authenticated:
+        messages.error(request, 'You are already logged In.')
+        if request.user.is_admin:
+            return redirect('/admin-page')
+        else:
+            return redirect('/')
+
     if request.method == 'POST':
         name = request.POST['name']
         email = request.POST['email']
@@ -64,23 +80,48 @@ def register(request):
 
 
 def about(request):
+    if request.user.is_authenticated:
+        if request.user.is_admin:
+            messages.error(request, 'You donot have access to this page.')
+            return redirect('/admin-page')
+
     therapist = Therapist.objects.all()
     return render(request, 'about.html', {'therapist': therapist})
 
 
 def services(request):
+    if request.user.is_authenticated:
+        if request.user.is_admin:
+            messages.error(request, 'You donot have access to this page.')
+            return redirect('/admin-page')
+
     return render(request, 'services.html')
 
 
 def FAQ(request):
+    if request.user.is_authenticated:
+        if request.user.is_admin:
+            messages.error(request, 'You donot have access to this page.')
+            return redirect('/admin-page')
+
     return render(request, 'FAQ.html')
 
 
 def contect(request):
+    if request.user.is_authenticated:
+        if request.user.is_admin:
+            messages.error(request, 'You donot have access to this page.')
+            return redirect('/admin-page')
+
     return render(request, 'contact.html')
 
 
 def individual(request, id):
+    if request.user.is_authenticated:
+        if request.user.is_admin:
+            messages.error(request, 'You donot have access to this page.')
+            return redirect('/admin-page')
+
     details = get_object_or_404(Therapist, id=id)
     return render(request, 'individual_therapist.html', {'details': details})
 
@@ -197,11 +238,13 @@ def bookinglist(request):
     }
     return render(request, 'bookings.html', context)
 
+
 stripe.api_key = 'sk_test_51P1lOZ06ho0W5mPfHhr4drqVtm8P1AwXs4vaJc5fuG5lJdCiZSPWusgTNVFBIVqpTOHXCX2zUAJe3rF4RBlcIPUY00kiP8S4oq'
+
 
 @login_required
 def booking(request):
-    
+
     if request.method == 'POST':
         therapist_id = request.POST.get('therapist')
         date = request.POST.get('date')
@@ -214,13 +257,13 @@ def booking(request):
         request.session['time'] = time
         request.session['appointmentType'] = appointmentType
         request.session['note'] = note
-        
+
         try:
             therapist_instance = get_object_or_404(Therapist, id=therapist_id)
             price = stripe.Price.create(
-                unit_amount=therapist_instance.price, 
+                unit_amount=therapist_instance.price,
                 currency='usd',
-                product='prod_PrXMqQakxRxCcx',  
+                product='prod_PrXMqQakxRxCcx',
                 recurring=None,
             )
 
@@ -228,7 +271,7 @@ def booking(request):
                 payment_method_types=['card'],
                 line_items=[
                     {
-                        'price': price.id, 
+                        'price': price.id,
                         'quantity': 1
                     }
                 ],
@@ -239,10 +282,12 @@ def booking(request):
             )
             return redirect(checkout_session.url, code=303)
         except Exception as e:
-            messages.error(request, "Couldn't process your request!! Please try again later.")
+            messages.error(
+                request, "Couldn't process your request!! Please try again later.")
             print(e)
             return redirect('/booking')
     return render(request, 'booking_page.html')
+
 
 def payment_successful(request):
     checkout_session_id = request.GET.get('session_id', None)
@@ -251,7 +296,7 @@ def payment_successful(request):
     time = request.session.get('time')
     appointmentType = request.session.get('appointmentType')
     note = request.session.get('note')
-    
+
     try:
         session = stripe.checkout.Session.retrieve(checkout_session_id)
         customer = stripe.Customer.retrieve(session.customer)
@@ -262,7 +307,7 @@ def payment_successful(request):
                 stripe_checkout_id=checkout_session_id
             )
             user_payment.save()
-            
+
             therapist_instance = get_object_or_404(Therapist, id=therapist_id)
             booking = Booking.objects.create(
                 user=request.user,
@@ -276,14 +321,17 @@ def payment_successful(request):
             booking.save()
     except Exception as e:
         print(e)
-        messages.error(request, "Payment unsuccessful. Please try again later.")
+        messages.error(
+            request, "Payment unsuccessful. Please try again later.")
         return redirect('/bookinglist')
 
     messages.success(request, "Payment successful. Your booking is confirmed.")
     return redirect('/bookinglist')
 
+
 def payment_cancelled(request):
     return render(request, 'individual_therapist.html')
+
 
 @csrf_exempt
 def stripe_webhook(request):
@@ -300,13 +348,14 @@ def stripe_webhook(request):
         return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError as e:
         return HttpResponse(status=400)
-    
+
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
         session_id = session.get('id', None)
-        time.sleep(15) 
+        time.sleep(15)
         user_payment = Payment.objects.get(stripe_checkout_id=session_id)
-        line_items = stripe.checkout.Session.list_line_items(session_id, limit=1)
+        line_items = stripe.checkout.Session.list_line_items(
+            session_id, limit=1)
         user_payment.payment_bool = True
         user_payment.save()
         return HttpResponse(status=200)
@@ -334,7 +383,6 @@ def user_edit_booking(request, id):
             booking.note = note
             booking.therapist_id = therapist_id
             booking.user_id = request.user
-
 
             booking.save()
 
@@ -428,12 +476,12 @@ def changepassword(request):
 #     time = request.session.get('time')
 #     appointmentType = request.session.get('appointmentType')
 #     note = request.session.get('note')
-    
+
 #     try:
 #         # Retrieve Stripe session and customer
 #         session = stripe.checkout.Session.retrieve(checkout_session_id)
 #         customer = stripe.Customer.retrieve(session.customer)
-        
+
 #         # Save payment
 #         with transaction.atomic():
 #             user_instance = get_object_or_404(CustomUser, id=request.user.id)
@@ -443,7 +491,7 @@ def changepassword(request):
 #                 stripe_checkout_id=checkout_session_id
 #             )
 #             user_payment.save()
-            
+
 #             # Save booking
 #             therapist_instance = get_object_or_404(Therapist, id=therapist_id)
 #             booking = Booking.objects.create(

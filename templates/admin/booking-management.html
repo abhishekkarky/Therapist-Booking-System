@@ -90,6 +90,16 @@
     </section>
 
     <!-- Include admin-panel.js -->
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        var alert = document.querySelector(".alert");
+        if (alert) {
+          setTimeout(function () {
+            alert.style.display = "none";
+          }, 3000);
+        }
+      });
+    </script>
     <script src="/static/js/admin-panel.js"></script>
   </body>
 </html>

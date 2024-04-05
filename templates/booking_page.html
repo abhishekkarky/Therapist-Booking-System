@@ -1,88 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bookings</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/static/css/alert.css" />
-    <script src="/static/js/message.js"></script>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    {% if messages %} {% for message in messages %}
-    <div
-      class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
-      style="position: fixed; top: 0; right: 0; z-index: 9999"
-      role="alert"
-    >
-      {{ message }}
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
-    </div>
-    {% endfor %} {% endif %} 
-    <div
-      class="fixed inset-0 bg-gray-300 bg-opacity-75 flex items-center justify-center"
-    >
-      <div class="bg-white p-6 w-1/2 relative">
-        <h1 class="mx-auto mb-4 text-center text-2xl">{{ request.GET.therapist_name }}</h1>
-       
 
-      <form
-        id="appointmentForm"
-        action="{% url 'booking' %}"
-        class="grid grid-cols-2 gap-4"
-        method="post"
-      >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bookings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/css/alert.css" />
+  <script src="/static/js/message.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body>
+  {% if messages %} {% for message in messages %}
+  <div
+    class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
+    style="position: fixed; top: 0; right: 0; z-index: 9999" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %} {% endif %}
+  <div class="fixed inset-0 bg-gray-300 bg-opacity-75 flex items-center justify-center">
+    <div class="bg-white p-6 w-1/2 relative">
+      <h1 class="mx-auto mb-4 text-center text-2xl">{{ request.GET.therapist_name }}</h1>
+
+
+      <form id="appointmentForm" action="{% url 'booking' %}" class="grid grid-cols-2 gap-4" method="post">
         {% csrf_token %}
-        <input
-          type="hidden"
-          name="therapist"
-          value="{{request.GET.therapist_id}}"
-        />
-        <input
-          type="hidden"
-          name="therapist_name"
-          value="{{request.GET.therapist_name}}"
-        />
+        <input type="hidden" name="therapist" value="{{request.GET.therapist_id}}" />
+        <input type="hidden" name="therapist_name" value="{{request.GET.therapist_name}}" />
 
         <div class="mb-4">
           <label for="appointmentDate">Date:</label>
-          <input
-            type="date"
-            id="appointmentDate"
-            name="date"
-            class="w-full border p-2"
-            required
-          />
+          <input type="date" id="appointmentDate" name="date" class="w-full border p-2" required />
         </div>
 
         <div class="mb-4">
           <label for="appointmentTime">Time:</label>
-          <input
-            type="time"
-            id="appointmentTime"
-            name="time"
-            class="w-full border p-2"
-            required
-          />
+          <input type="time" id="appointmentTime" name="time" class="w-full border p-2" required />
         </div>
 
         <div class="mb-4">
           <label for="appointmentType">Appointment Type:</label>
-          <select
-            id="appointmentType"
-            name="appointmentType"
-            class="w-full border p-2"
-            required
-          >
+          <select id="appointmentType" name="appointmentType" class="w-full border p-2" required>
             <option value="Physical">Physical</option>
             <option value="Virtual">Virtual</option>
           </select>
@@ -90,28 +50,30 @@
 
         <div class="mb-4">
           <label for="appointmentDescription">Additional Notes:</label>
-          <textarea
-            id="appointmentDescription"
-            name="note"
-            class="w-full border p-2"
-          ></textarea>
+          <textarea id="appointmentDescription" name="note" class="w-full border p-2"></textarea>
         </div>
-        <button
-          type="submit"
-          class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded"
-        >
+        <button type="submit" class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded">
           Book Appointment
         </button>
-        <a
-          href="/about"
-          class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded text-center"
-        >
+        <a href="/about" class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded text-center">
           Back to Therapists
         </a>
       </form>
     </div>
-</div>
+  </div>
 
-    </div>
-  </body>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      var alert = document.querySelector(".alert");
+      if (alert) {
+        setTimeout(function () {
+          alert.style.display = "none";
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+
 </html>

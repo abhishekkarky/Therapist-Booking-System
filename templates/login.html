@@ -8,6 +8,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
+    {% if messages %} {% for message in messages %}
+    <div
+      class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
+      style="position: fixed; top: 0; right: 0; z-index: 9999"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %} {% endif %}
     <main class="md:flex justify-center items-center w-full h-screen mx-auto my-auto">
         <div class="md:w-[320px] w-[90%] mb-8 md:mb-0  md:mr-0">
             <img class="w-full h-auto rounded-full" src="/static/images/back2.svg" alt="">
@@ -20,5 +35,15 @@
             <a class="text-black-500 text-center py-2 rounded-md" href="signup" >Not a Member? click here</a>
         </form>
     </main>
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+          var alert = document.querySelector(".alert");
+          if (alert) {
+            setTimeout(function () {
+              alert.style.display = "none";
+            }, 3000);
+          }
+        });
+      </script>
 </body>
 </html>

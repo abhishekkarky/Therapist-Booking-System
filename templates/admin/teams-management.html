@@ -210,6 +210,17 @@
       // Handle form submission
     </script>
 
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        var alert = document.querySelector(".alert");
+        if (alert) {
+          setTimeout(function () {
+            alert.style.display = "none";
+          }, 3000);
+        }
+      });
+    </script>
+
     <!-- Include admin-panel.js -->
     <script src="/static/js/admin-panel.js"></script>
   </body>

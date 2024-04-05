@@ -21,13 +21,32 @@
   </head>
 
   <body>
-
+    {% if messages %} {% for message in messages %}
+    <div
+      class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
+      style="position: fixed; top: 0; right: 0; z-index: 9999"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %} {% endif %} {% include 'header.html' %}
     <!-- main body -->
     <div class="container mx-auto flex flex-wrap p-8 lg:py-16">
       <!-- Increased padding here -->
       <!-- Therapist Image -->
       <div class="w-full lg:w-1/2 mb-8 lg:mb-0">
-        <img src="{{details.image.url}}" class="w-full" alt="Therapist Image" />
+        <img
+          src="{{details.image.url}}"
+          class="w-full"
+          alt="Therapist Image"
+          style="height: 500px"
+        />
       </div>
       <!-- Therapist Details -->
       <div class="w-full lg:w-1/2 flex flex-col justify-center px-4">
@@ -168,6 +187,16 @@
           event.target.reset();
           document.getElementById("myModal").classList.add("hidden");
         });
+    </script>
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        var alert = document.querySelector(".alert");
+        if (alert) {
+          setTimeout(function () {
+            alert.style.display = "none";
+          }, 3000);
+        }
+      });
     </script>
   </body>
 </html>

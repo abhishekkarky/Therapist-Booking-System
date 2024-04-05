@@ -8,14 +8,14 @@
     <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
       {% if user.is_authenticated %}
       <a
-        class="text-white bg-[#E77450] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#E77450] dark:hover:bg-[#F5A58C] dark:focus:ring-blue-800"
-        href="/login"
+        class="text-white bg-amber-600 hover:bg-grey-800 focus:outline-none focus:ring-grey-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-amber-600 dark:hover:bg-[#F5A58C] dark:focus:ring-grey-800"
+        href="logout"
         >Logout</a
       >
       {% else %}
       <a
-        class="text-white bg-[#E77450] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#E77450] dark:hover:bg-[#F5A58C] dark:focus:ring-blue-800"
-        href="/logout"
+        class="text-white bg-amber-600 hover:bg-grey-800 focus:outline-none focus:ring-grey-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-amber-600 dark:hover:bg-[#F5A58C] dark:focus:ring-grey-800"
+        href="login"
         >Login</a
       >
       {% endif %}

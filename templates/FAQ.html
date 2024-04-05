@@ -12,6 +12,21 @@
 </head>
 
 <body>
+    {% if messages %} {% for message in messages %}
+    <div
+      class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
+      style="position: fixed; top: 0; right: 0; z-index: 9999"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %} {% endif %}
     {% include 'header.html' %}
 
 <!-- main body -->
@@ -77,5 +92,15 @@
         <hr class="my-6 border-white-200 sm:mx-auto dark:border-white-700 lg:my-8 w-full" />
     </div>
 </footer>
+<script>
+    window.addEventListener("DOMContentLoaded", function () {
+      var alert = document.querySelector(".alert");
+      if (alert) {
+        setTimeout(function () {
+          alert.style.display = "none";
+        }, 3000);
+      }
+    });
+  </script>
 </body>
 </html>
