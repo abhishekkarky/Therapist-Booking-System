@@ -251,6 +251,17 @@ def booking(request):
         time = request.POST.get('time')
         appointmentType = request.POST.get('appointmentType')
         note = request.POST.get('note')
+        
+        # Check if there is already a booking for the same date, time, and therapist
+        existing_booking = Booking.objects.filter(
+            therapist_id=therapist_id,
+            date=date,
+            time=time
+        ).exists()
+
+        if existing_booking:
+            messages.error(request, "This slot is already booked. Please choose another date or time.")
+            return redirect('/individual_therapist/' + str(therapist_id))
 
         request.session['therapist'] = therapist_id
         request.session['date'] = date

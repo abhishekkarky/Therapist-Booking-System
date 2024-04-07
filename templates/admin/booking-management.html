@@ -53,7 +53,7 @@
             </div>
           </div>
 
-          <div class="class">
+          <div class="class overflow-scroll">
             <table class="w-full bg-white border border-gray-200">
               <thead>
                 <tr>
@@ -62,6 +62,7 @@
                   <th class="py-2 px-4 border-b">Time</th>
                   <th class="py-2 px-4 border-b">Note</th>
                   <th class="py-2 px-4 border-b">Appointment Type</th>
+                  <th class="py-2 px-4 border-b">Paid</th>
                   <th class="py-2 px-4 border-b">Action</th>
                 </tr>
               </thead>
@@ -78,7 +79,22 @@
                     {{ booking.appointmentType }}
                   </td>
                   <td class="py-2 px-4 border-b">
-                    <a href="{% url 'delete-booking' booking.id %}">Delete</a>
+                    {% if booking.isPaid %}
+                    <span class="bg-green-500 text-white px-2 py-1 rounded-full"
+                      >Yes</span
+                    >
+                    {% else %}
+                    <span class="bg-red-500 text-white px-2 py-1 rounded-full"
+                      >No</span
+                    >
+                    {% endif %}
+                  </td>
+                  <td class="py-2 px-4 border-b">
+                    <a
+                      class="bg-red-500 text-white px-2 py-1 rounded-full"
+                      href="{% url 'delete-booking' booking.id %}"
+                      >Delete</a
+                    >
                   </td>
                 </tr>
                 {% endfor %}
