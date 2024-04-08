@@ -86,9 +86,9 @@ WSGI_APPLICATION = 'therapist_booking.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'therapists_booking',
+        'NAME': 'therapist',
         'USER': 'root',
-        'PASSWORD': 'user',
+        'PASSWORD': 'abi123',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {

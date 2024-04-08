@@ -12,7 +12,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
 
 from Auth.models import Booking, Payment, Therapist, CustomUser
+from Home.models import ContactList
 
+from datetime import datetime, timedelta
 
 def home(request):
     if request.user.is_authenticated:
@@ -128,7 +130,24 @@ def individual(request, id):
 
 def adminPage(request):
     if (request.user.is_authenticated and request.user.is_admin):
-        return render(request, 'admin/admin-panel.html')
+
+        therapist = Therapist.objects.all().count()
+        userCount = CustomUser.objects.all().count()
+        bookingCount = Booking.objects.all().count()
+        contactCount = ContactList.objects.all().count()
+        seven_days_ago = datetime.now() - timedelta(days=7)
+        user_count_last_7_days = CustomUser.objects.filter(created_at=seven_days_ago).count()
+        # booking_count_last_7_days = Booking.objects.filter(created_at=seven_days_ago).count()
+
+        context = {
+            'therapist':therapist,
+            'userCount':userCount,
+            'bookingCount':bookingCount,
+            'contactCount':contactCount,
+            'user_count_last_7_days':user_count_last_7_days,
+            # 'booking_count_last_7_days':booking_count_last_7_days
+        }
+        return render(request, 'admin/admin-panel.html',context)
     else:
         messages.error(
             request, "You do not have permission to access this page.")

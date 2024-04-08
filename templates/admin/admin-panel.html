@@ -40,10 +40,10 @@
       <div class="top">
         <i class="uil uil-bars sidebar-toggle"></i>
 
-        <div class="search-box">
+        {% comment %} <div class="search-box">
           <i class="uil uil-search"></i>
           <input type="text" placeholder="Search here..." />
-        </div>
+        </div> {% endcomment %}
 
         <img src="/static/images/profile.jpg" alt="" />
       </div>
@@ -56,20 +56,30 @@
           </div>
 
           <div class="boxes">
-            <div class="box box1">
+            <div class="box box3">
               <i class="uil uil-thumbs-up"></i>
               <span class="text">Total Appointment</span>
-              <span class="number">50,120</span>
+              <span class="number">{{bookingCount}}</span>
             </div>
-            <div class="box box2">
+            <div class="box box3">
               <i class="uil uil-comments"></i>
               <span class="text">Total users</span>
-              <span class="number">200,120</span>
+              <span class="number">{{userCount}}</span>
             </div>
             <div class="box box3">
               <i class="uil uil-share"></i>
               <span class="text">Total Therapiest</span>
-              <span class="number">2000</span>
+              <span class="number">{{therapist}}</span>
+            </div>
+            <div class="box box3" style="margin-top: 10px">
+              <i class="uil uil-share"></i>
+              <span class="text">New Users</span>
+              <span class="number">{{user_count_last_7_days}}</span>
+            </div>
+            <div class="box box3" style="margin-top: 10px">
+              <i class="uil uil-share"></i>
+              <span class="text">New Bookings</span>
+              <span class="number">{{user_count_last_7_days}}</span>
             </div>
           </div>
         </div>
