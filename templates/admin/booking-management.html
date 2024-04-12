@@ -37,10 +37,12 @@
     <section class="dashboard">
       <div class="top">
         <i class="uil uil-bars sidebar-toggle"></i>
-        {% comment %} <div class="search-box">
+        {% comment %}
+        <div class="search-box">
           <i class="uil uil-search"></i>
           <input type="text" placeholder="Search here..." />
-        </div> {% endcomment %}
+        </div>
+        {% endcomment %}
         <img src="/static/images/profile.jpg" alt="" />
       </div>
 
@@ -63,6 +65,7 @@
                   <th class="py-2 px-4 border-b">Note</th>
                   <th class="py-2 px-4 border-b">Appointment Type</th>
                   <th class="py-2 px-4 border-b">Paid</th>
+                  <th class="py-2 px-4 border-b">Status</th>
                   <th class="py-2 px-4 border-b">Action</th>
                 </tr>
               </thead>
@@ -87,6 +90,25 @@
                     <span class="bg-red-500 text-white px-2 py-1 rounded-full"
                       >No</span
                     >
+                    {% endif %}
+                  </td>
+                  <td class="py-2 px-4 border-b">
+                    {% if booking.date > today %}
+                    <span
+                      class="bg-green-500 text-white px-2 py-1 rounded-full"
+                    >
+                      Upcoming
+                    </span>
+                    {% elif booking.date < today %}
+                    <span class="bg-red-500 text-white px-2 py-1 rounded-full">
+                      Past
+                    </span>
+                    {% elif booking.date == today %}
+                    <span
+                      class="bg-yellow-500 text-white px-2 py-1 rounded-full"
+                    >
+                      Today
+                    </span>
                     {% endif %}
                   </td>
                   <td class="py-2 px-4 border-b">

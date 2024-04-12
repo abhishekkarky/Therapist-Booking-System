@@ -1,3 +1,6 @@
+from .models import Booking
+from django.shortcuts import render, redirect
+from datetime import datetime
 import time
 import stripe
 from django.conf import settings
@@ -15,6 +18,7 @@ from Auth.models import Booking, Payment, Therapist, CustomUser
 from Home.models import ContactList
 
 from datetime import datetime, timedelta
+
 
 def home(request):
     if request.user.is_authenticated:
@@ -108,14 +112,37 @@ def FAQ(request):
 
     return render(request, 'FAQ.html')
 
+# @login_required
 
-def contect(request):
+
+def contact(request):
     if request.user.is_authenticated:
         if request.user.is_admin:
             messages.error(request, 'You donot have access to this page.')
             return redirect('/admin-page')
 
+    if request.method == 'POST':
+        firstName = request.POST.get("firstName")
+        lastName = request.POST.get("lastName")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+        message = request.POST.get("message")
+        query = ContactList(firstName=firstName, lastName=lastName,
+                            email=email, phone=phone, message=message)
+        try:
+            query.save()
+            message = "Received your message!! We will contact you shortly."
+            messages.success(request, message)
+            return redirect('/contact')
+        except Exception as e:
+            message = "Couldn't process your request!! Please try again later."
+            messages.error(request, message)
     return render(request, 'contact.html')
+
+
+def contactList(request):
+    details = ContactList.objects.all()
+    return render(request, 'admin/contact-list.html', {'details': details})
 
 
 def individual(request, id):
@@ -136,18 +163,19 @@ def adminPage(request):
         bookingCount = Booking.objects.all().count()
         contactCount = ContactList.objects.all().count()
         seven_days_ago = datetime.now() - timedelta(days=7)
-        user_count_last_7_days = CustomUser.objects.filter(created_at=seven_days_ago).count()
+        user_count_last_7_days = CustomUser.objects.filter(
+            created_at=seven_days_ago).count()
         # booking_count_last_7_days = Booking.objects.filter(created_at=seven_days_ago).count()
 
         context = {
-            'therapist':therapist,
-            'userCount':userCount,
-            'bookingCount':bookingCount,
-            'contactCount':contactCount,
-            'user_count_last_7_days':user_count_last_7_days,
+            'therapist': therapist,
+            'userCount': userCount,
+            'bookingCount': bookingCount,
+            'contactCount': contactCount,
+            'user_count_last_7_days': user_count_last_7_days,
             # 'booking_count_last_7_days':booking_count_last_7_days
         }
-        return render(request, 'admin/admin-panel.html',context)
+        return render(request, 'admin/admin-panel.html', context)
     else:
         messages.error(
             request, "You do not have permission to access this page.")
@@ -155,11 +183,14 @@ def adminPage(request):
 
 
 def bookingManagement(request):
-    if (request.user.is_authenticated and request.user.is_admin):
+    if request.user.is_authenticated and request.user.is_admin:
         bookings = Booking.objects.all()
+        today = datetime.now().date()
         context = {
-            'bookings': bookings
+            'bookings': bookings,
+            'today': today,
         }
+
         return render(request, 'admin/booking-management.html', context)
     else:
         messages.error(
@@ -270,7 +301,7 @@ def booking(request):
         time = request.POST.get('time')
         appointmentType = request.POST.get('appointmentType')
         note = request.POST.get('note')
-        
+
         # Check if there is already a booking for the same date, time, and therapist
         existing_booking = Booking.objects.filter(
             therapist_id=therapist_id,
@@ -279,7 +310,8 @@ def booking(request):
         ).exists()
 
         if existing_booking:
-            messages.error(request, "This slot is already booked. Please choose another date or time.")
+            messages.error(
+                request, "This slot is already booked. Please choose another date or time.")
             return redirect('/individual_therapist/' + str(therapist_id))
 
         request.session['therapist'] = therapist_id
@@ -394,6 +426,10 @@ def stripe_webhook(request):
 @login_required
 def user_edit_booking(request, id):
     booking = get_object_or_404(Booking, pk=id)
+    today = datetime.now().date()
+    context = {
+        'today': today
+    }
     if booking.user != request.user:
         message = "You are not authorized to edit this booking."
         messages.error(request, message)
@@ -425,7 +461,7 @@ def user_edit_booking(request, id):
             print(e)
             return redirect('/bookinglist')
     else:
-        return render(request, 'edit_booking.html', {'booking': booking})
+        return render(request, 'edit_booking.html', {'booking': booking, 'today': today})
 
 
 def user_delete_booking(request, id):
