@@ -125,17 +125,19 @@
       <div class="flex justify-center items-center mt-20">
         <div class="text-5xl font-semibold text-gray-800">Reviews</div>
       </div>
+      <div class="flex flex-row">
+      {% if testimonials %} {% for testimonial in testimonials %}
       <div class="max-w-sm rounded p-4 mt-10 text-center">
         <img
           class="rounded-full mx-auto mb-4"
           height="200"
           width="200"
-          src="static/images/person.png"
+          src="{{testimonial.image.url}}"
           alt="Avatar of Person Watson"
         />
         <div class="flex justify-center items-center mb-2">
           <div class="text-sm">
-            <p class="text-gray-900 leading-none">Person Watson</p>
+            <p class="text-gray-900 leading-none">{{testimonial.name}}</p>
             <div class="flex items-center mt-1">
               <svg
                 class="fill-current text-[#E77450] w-4 h-4 mr-1"
@@ -190,12 +192,14 @@
         </div>
         <div class="text-gray-700 text-base">
           <p>
-            The experience from booking to walking into the office is smooth and
-            stress-free. It's evident that the team at Therapist values their
-            patients' time and comfort.
+            {{testimonial.description}}
           </p>
         </div>
       </div>
+      {% endfor %} {% else %}
+      <p class="m-4">No Reviews available ...</p>
+      {% endif %}
+    </div\>
     </div>
 
     <div class="flex flex-wrap m-4 md:m-8 lg:m-12 justify-center">
@@ -331,15 +335,16 @@
       });
     </script>
     <script>
-      document.getElementById("toggleBtn").addEventListener("click", function() {
-        var navbar = document.getElementById("navbar-sticky");
-        if (navbar.classList.contains("hidden")) {
-          navbar.classList.remove("hidden");
-        } else {
-          navbar.classList.add("hidden");
-        }
-      });
-      </script>
-      
+      document
+        .getElementById("toggleBtn")
+        .addEventListener("click", function () {
+          var navbar = document.getElementById("navbar-sticky");
+          if (navbar.classList.contains("hidden")) {
+            navbar.classList.remove("hidden");
+          } else {
+            navbar.classList.add("hidden");
+          }
+        });
+    </script>
   </body>
 </html>

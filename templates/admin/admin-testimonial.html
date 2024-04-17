@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Therapist Boking</title>
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="/static/css/adminpanel.css" />
+
+    <!----===== Iconscout CSS ===== -->
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+    />
+    <link rel="stylesheet" href="/static/css/alert.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    {% if messages %} {% for message in messages %}
+    <div
+      class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
+      style="position: fixed; top: 0; right: 0; z-index: 9999"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %} {% endif %} {% include 'admin/navbar.html' %}
+
+    <section class="dashboard">
+      <div class="top">
+        <i class="uil uil-bars sidebar-toggle"></i>
+        <img src="/static/images/profile.jpg" alt="" />
+      </div>
+
+      <div class="dash-content p-6">
+        <div class="overview">
+          <div class="title flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <i
+                class="uil uil-tachometer-fast-alt text-2xl"
+                style="background-color: #0291dd"
+              ></i>
+              <span class="text-2xl ml-2">Testimonials</span>
+            </div>
+            <button
+              id="openModal"
+              class="bg-[#0291dd] text-white px-4 py-2 rounded"
+            >
+              Add
+            </button>
+          </div>
+
+          <!-- Table with property data -->
+
+          <div class="overflow-scroll">
+            <table class="w-full bg-white border border-gray-200">
+              <thead>
+                <tr>
+                  <th class="py-2 px-8 border-b">Image</th>
+                  <th class="py-2 px-8 border-b">Intro</th>
+                  <th class="py-2 px-8 border-b">Name</th>
+                  <th class="py-2 px-8 border-b">Description</th>
+                  <th class="py-2 px-8 border-b">Action</th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                <!-- Example row with additional fields -->
+                {% for testimonial in testimonials %}
+                <tr class="text-center">
+                  <td class="py-2 px-4 border-b">
+                    {% if testimonial.image.url != null %}
+                    <img
+                      src="{{ testimonial.image.url }}"
+                      alt="testimonial Image"
+                      class="w-8 h-8 mr-2"
+                    />
+                    {% else %}
+                    <img
+                      src="static/images/noimage.jpg"
+                      alt="testimonial Image"
+                      class="w-8 h-8 mr-2"
+                    />
+                    {% endif %}
+                  </td>
+                  <td class="py-2 px-8 border-b">{{testimonial.intro}}</td>
+                  <td class="py-2 px-8 border-b">{{testimonial.name}}</td>
+                  <td class="py-2 px-8 border-b">
+                    {{testimonial.description}}
+                  </td>
+                  <td class="py-2 px-4 border-b">
+                    <a href="/admin-edit-testimonial/{{ testimonial.id }}">
+                      <i
+                        id="openEditModal"
+                        class="uil uil-edit text-green-500 cursor-pointer hover:text-green-700"
+                      ></i>
+                    </a>
+                    <a
+                      href="{% url 'delete-testimonial' testimonial.id %}"
+                      type="submit"
+                      ><i
+                        class="uil uil-trash-alt text-red-500 cursor-pointer hover:text-red-700"
+                        data-property-id="{{ property.id }}"
+                      ></i>
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+                <!-- Add more rows as needed -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal -->
+    <div
+      id="myModal"
+      class="modal hidden fixed inset-0 bg-gray-300 bg-opacity-75 flex items-center justify-center z-20"
+    >
+      <div class="modal-content bg-white p-6 w-1/2">
+        <span id="closeModal" class="close text-white cursor-pointer bg-red-600 px-3 py-1 rounded">&times;</span>
+
+        <!-- Property Add Form -->
+        <form
+          action="{% url 'admin-testimonial' %}"
+          method="post"
+          id="propertyForm"
+          class="grid grid-cols-2 gap-4 mt-4"
+          enctype="multipart/form-data"
+        >
+          {% csrf_token %}
+          <div class="mb-4">
+            <label for="name">Name:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="w-full border p-2"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="intro">Intro:</label>
+            <input
+              type="text"
+              id="intro"
+              name="intro"
+              class="w-full border p-2"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="description">Description:</label>
+            <input
+              type="text"
+              id="description"
+              name="description"
+              class="w-full border p-2"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="image">Photos:</label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              class="w-full border p-2"
+              multiple
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="col-span-2 bg-[#E77450] text-white px-4 py-2 rounded"
+          >
+            Add Testimonial
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        var alert = document.querySelector(".alert");
+        if (alert) {
+          setTimeout(function () {
+            alert.style.display = "none";
+          }, 3000);
+        }
+      });
+    </script>
+
+    <script>
+      document
+        .getElementById("openModal")
+        .addEventListener("click", function () {
+          document.getElementById("myModal").classList.remove("hidden");
+        });
+
+      document
+        .getElementById("closeModal")
+        .addEventListener("click", function () {
+          document.getElementById("myModal").classList.add("hidden");
+        });
+
+      // Handle form submission
+    </script>
+
+    <!-- Include admin-panel.js -->
+    <script src="/static/js/admin-panel.js"></script>
+  </body>
+</html>
