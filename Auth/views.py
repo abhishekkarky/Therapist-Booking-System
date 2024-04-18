@@ -1,4 +1,4 @@
-from .models import Booking
+from .models import Booking, Testimonials
 from django.shortcuts import render, redirect
 from datetime import datetime
 import time
@@ -22,9 +22,10 @@ from datetime import datetime, timedelta
 
 def home(request):
     if request.user.is_authenticated:
+        testimonials = Testimonials.objects.all()
         if request.user.is_admin:
             messages.error(request, 'You donot have access to this page.')
-            return redirect('/admin-page')
+            return redirect('/admin-page', {"testimonials": testimonials})
 
     return render(request, 'home.html')
 
@@ -533,6 +534,89 @@ def changepassword(request):
             return redirect('/profile_page')
 
     return render(request, 'changepassword.html')
+
+
+def admin_testimonial(request):
+    if (request.user.is_authenticated and request.user.is_admin):
+        testimonials = Testimonials.objects.all()
+        context = {
+            'testimonials': testimonials,
+        }
+        if request.method == 'POST':
+            image = request.FILES.get("image")
+            name = request.POST.get("name")
+            description = request.POST.get("description")
+            intro = request.POST.get("intro")
+            print(image, name, description, intro)
+
+            test_obj = Testimonials(
+                image=image,
+                name=name,
+                description=description,
+                intro=intro
+            )
+            print(test_obj)
+
+            try:
+                test_obj.save()
+                message = "Testimonial added successfully"
+                messages.success(request, message)
+                return redirect('/admin-testimonial')
+            except Exception as e:
+                message = "Couldn't add Testimonial. Please try again later."
+                messages.error(request, message)
+                print(e)
+
+        return render(request, 'admin/admin-testimonial.html', context)
+    else:
+        messages.error(
+            request, "You do not have permission to access this page.")
+        return redirect('dashboard')
+
+
+def admin_delete_test(request, id):
+    if (request.user.is_authenticated and request.user.is_admin):
+        delete_test = get_object_or_404(Testimonials, pk=id)
+        delete_test.delete()
+        message = "Testimonial deleted successfully"
+        messages.success(request, message)
+        return redirect('/admin-testimonial')
+    else:
+        messages.error(
+            request, "You do not have permission to access this page.")
+        return redirect('dashboard')
+
+
+def edit_testimonial(request, id):
+    if (request.user.is_authenticated and request.user.is_admin):
+        details = get_object_or_404(Testimonials, id=id)
+
+        if request.method == 'POST':
+            image = request.FILES.get("image")
+            name = request.POST.get("name")
+            intro = request.POST.get("intro")
+            description = request.POST.get("description")
+
+            try:
+                if image is None:
+                    image = details.image
+
+                editQuery = Testimonials(
+                    id=id, image=image, name=name, intro=intro, description=description)
+                editQuery.save()
+                message = "Testimonial edited successfully"
+                messages.success(request, message)
+                return redirect('/admin-testimonial')
+            except Exception as e:
+                message = "Couldn't edit property. Please try again later."
+                messages.error(request, message)
+                print(e)
+
+        return render(request, 'admin/testimonial-edit.html', {'testi': details})
+    else:
+        messages.error(
+            request, "You do not have permission to access this page.")
+        return redirect('dashboard')
 
 
 # def payment_successful(request):

@@ -48,3 +48,8 @@ class Payment(models.Model):
     payment_bool = models.BooleanField(default=False)
     stripe_checkout_id = models.CharField(max_length=500)
 
+class Testimonials(models.Model):
+    image = models.ImageField(upload_to='media/', default='/static/images/img_1.jpg')
+    intro = models.CharField(max_length = 100)
+    name = models.CharField(max_length = 100)
+    description = models.CharField(max_length = 1000)
