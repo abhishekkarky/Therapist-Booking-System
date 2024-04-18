@@ -166,7 +166,7 @@ def adminPage(request):
         seven_days_ago = datetime.now() - timedelta(days=7)
         user_count_last_7_days = CustomUser.objects.filter(
             created_at=seven_days_ago).count()
-        # booking_count_last_7_days = Booking.objects.filter(created_at=seven_days_ago).count()
+        booking_count_last_7_days = Booking.objects.filter(created_at__gte=seven_days_ago).count()
 
         context = {
             'therapist': therapist,
@@ -174,7 +174,7 @@ def adminPage(request):
             'bookingCount': bookingCount,
             'contactCount': contactCount,
             'user_count_last_7_days': user_count_last_7_days,
-            # 'booking_count_last_7_days':booking_count_last_7_days
+            'booking_count_last_7_days':booking_count_last_7_days
         }
         return render(request, 'admin/admin-panel.html', context)
     else:

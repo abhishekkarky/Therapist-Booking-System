@@ -42,6 +42,8 @@ class Booking(models.Model):
     appointmentType = models.CharField(max_length=100)
     note = models.TextField(blank=True, null=True)
     isPaid = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
 
 class Payment(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

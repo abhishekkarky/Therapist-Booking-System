@@ -16,6 +16,10 @@
       href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
     />
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    rel="stylesheet"
+  />
 
     <title>Admin Dashboard Panel</title>
   </head>
@@ -57,29 +61,29 @@
 
           <div class="boxes">
             <div class="box box3">
-              <i class="uil uil-thumbs-up"></i>
+              <i class="fa-solid fa-calendar-check"></i>
               <span class="text">Total Appointment</span>
               <span class="number">{{bookingCount}}</span>
             </div>
             <div class="box box3">
-              <i class="uil uil-comments"></i>
+              <i class="fa-solid fa-user"></i>
               <span class="text">Total users</span>
               <span class="number">{{userCount}}</span>
             </div>
             <div class="box box3">
-              <i class="uil uil-share"></i>
+              <i class="fa-solid fa-user-doctor"></i>
               <span class="text">Total Therapiest</span>
               <span class="number">{{therapist}}</span>
             </div>
             <div class="box box3" style="margin-top: 10px">
-              <i class="uil uil-share"></i>
+              <i class="fa-solid fa-users"></i>
               <span class="text">New Users</span>
               <span class="number">{{user_count_last_7_days}}</span>
             </div>
             <div class="box box3" style="margin-top: 10px">
-              <i class="uil uil-share"></i>
-              <span class="text">New Bookings</span>
-              <span class="number">{{user_count_last_7_days}}</span>
+              <i class="fa-solid fa-calendar-check"></i>
+              <span class="text">New Appointment</span>
+              <span class="number">{{booking_count_last_7_days}}</span>
             </div>
           </div>
         </div>
