@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/static/css/alert.css" />
     <script src="/static/js/message.js"></script>
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -14,6 +15,20 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <style>
+      .testimonials {
+        display: none;
+      }
+
+      .testimonials.active {
+        display: block;
+      }
+
+      #testimonials-container {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+      }
+    </style>
   </head>
 
   <body>
@@ -104,10 +119,12 @@
               motivations, develop coping strategies, and more. You’ll connect
               through live sessions, ongoing messaging, or both.
             </p>
-            <a href="#" class="block bg-[#E77450] rounded-full text-white py-2 px-4 w-full text-center">
+            <a
+              href="#"
+              class="block bg-[#E77450] rounded-full text-white py-2 px-4 w-full text-center"
+            >
               Learn more
             </a>
-            
           </div>
         </div>
         <div
@@ -122,86 +139,87 @@
       </div>
     </div>
 
-    <div class="bg-white mb-20 flex flex-col justify-center items-center">
+     <div class="bg-white mb-20 flex flex-col justify-center items-center">
       <div class="flex justify-center items-center mt-20">
         <div class="text-5xl font-semibold text-gray-800">Reviews</div>
       </div>
-      <div class="flex flex-row">
-      {% if testimonials %} {% for testimonial in testimonials %}
-      <div class="max-w-sm rounded p-4 mt-10 text-center">
-        <img
-          class="rounded-full mx-auto mb-4"
-          height="200"
-          width="200"
-          src="{{testimonial.image.url}}"
-          alt="Avatar of Person Watson"
-        />
-        <div class="flex justify-center items-center mb-2">
-          <div class="text-sm">
-            <p class="text-gray-900 leading-none">{{testimonial.name}}</p>
-            <div class="flex items-center mt-1">
-              <svg
-                class="fill-current text-[#E77450] w-4 h-4 mr-1"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M10 15l-5.5 3 1.5-6.5L0 7h6.5L10 0l3.5 7H20l-5.5 4.5 1.5 6.5z"
-                />
-              </svg>
-              <svg
-                class="fill-current text-[#E77450] w-4 h-4 mr-1"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M10 15l-5.5 3 1.5-6.5L0 7h6.5L10 0l3.5 7H20l-5.5 4.5 1.5 6.5z"
-                />
-              </svg>
-              <svg
-                class="fill-current text-[#E77450] w-4 h-4 mr-1"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M10 15l-5.5 3 1.5-6.5L0 7h6.5L10 0l3.5 7H20l-5.5 4.5 1.5 6.5z"
-                />
-              </svg>
-              <svg
-                class="fill-current text-[#E77450] w-4 h-4 mr-1"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M10 15l-5.5 3 1.5-6.5L0 7h6.5L10 0l3.5 7H20l-5.5 4.5 1.5 6.5z"
-                />
-              </svg>
-              <svg
-                class="fill-current text-[#E77450] w-4 h-4"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M10 15l-5.5 3 1.5-6.5L0 7h6.5L10 0l3.5 7H20l-5.5 4.5 1.5 6.5z"
-                />
-              </svg>
+        <div class=" carousel relative w-full px-4 mt-6" >
+        <div id="imageContainer" class="w-full flex space-x-10 transition-transform duration-500 ease-in-out">
+          {% if testimonials %} {% for testimonial in testimonials %}
+          <div class=" shadow-full p-4 text-center">
+            <img
+              class="rounded-full mb-4 object-cover"
+              
+              src="{{testimonial.image.url}}"
+              alt="Avatar of Person Watson"
+            />
+            <div class="flex justify-center items-center mb-2">
+              <div class="text-sm">
+                <p class="text-gray-900 leading-none">{{testimonial.name}}</p>
+                <div class="flex items-center mt-1">
+                  <svg
+                    class="fill-current text-[#E77450] w-4 h-4 mr-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M10 15l-5.5 3 1.5-6.5L0 7h6.5L10 0l3.5 7H20l-5.5 4.5 1.5 6.5z"
+                    />
+                  </svg>
+                  <svg
+                    class="fill-current text-[#E77450] w-4 h-4 mr-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M10 15l-5.5 3 1.5-6.5L0 7h6.5L10 0l3.5 7H20l-5.5 4.5 1.5 6.5z"
+                    />
+                  </svg>
+                  <svg
+                    class="fill-current text-[#E77450] w-4 h-4 mr-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M10 15l-5.5 3 1.5-6.5L0 7h6.5L10 0l3.5 7H20l-5.5 4.5 1.5 6.5z"
+                    />
+                  </svg>
+                  <svg
+                    class="fill-current text-[#E77450] w-4 h-4 mr-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M10 15l-5.5 3 1.5-6.5L0 7h6.5L10 0l3.5 7H20l-5.5 4.5 1.5 6.5z"
+                    />
+                  </svg>
+                  <svg
+                    class="fill-current text-[#E77450] w-4 h-4 mr-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M10 15l-5.5 3 1.5-6.5L0 7h6.5L10 0l3.5 7H20l-5.5 4.5 1.5 6.5z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div>
+              <p class="text-4xl text-[#00CCE1] text-2xl"></p>
+            </div>
+            <div class="text-gray-700 text-base">
+              <p>{{testimonial.description}}</p>
             </div>
           </div>
+          {% endfor %} {% else %}
+          <p class="m-4">No Reviews available ...</p>
+          {% endif %}
         </div>
-        <div>
-          <p class="text-4xl text-[#00CCE1] text-2xl">``</p>
-        </div>
-        <div class="text-gray-700 text-base">
-          <p>
-            {{testimonial.description}}
-          </p>
-        </div>
+        
       </div>
-      {% endfor %} {% else %}
-      <p class="m-4">No Reviews available ...</p>
-      {% endif %}
-    </div>
-    </div>
+    </div> 
+    
 
     <div class="flex flex-wrap m-4 md:m-8 lg:m-12 justify-center">
       <div class="w-full md:w-2/3 lg:w-2/5 xl:w-2/6">
@@ -237,10 +255,12 @@
             </p>
           </div>
           <div class="md:pl-10">
-            <a href="/services" class="inline-block bg-[#E77450] text-white py-2 px-4 m-4 rounded-full">
+            <a
+              href="/services"
+              class="inline-block bg-[#E77450] text-white py-2 px-4 m-4 rounded-full"
+            >
               Our Services
             </a>
-            
           </div>
         </div>
       </div>
@@ -348,5 +368,44 @@
           }
         });
     </script>
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        const carousel = document.querySelector(".carousel");
+        const images = carousel.querySelectorAll("img");
+        const imageWidth = images[1].clientWidth;
+        var screenWidth = window.innerWidth;
+
+        let currentIndex = 0;
+
+        function slide() {
+          var screenWidth = window.innerWidth;
+          var imagesLength;
+          if (screenWidth < 768) {
+            imagesLength = 6;
+          } else if (screenWidth >= 768 && screenWidth <= 1024) {
+            imagesLength = 5;
+          } else if (screenWidth > 1024 && screenWidth <= 1800) {
+            imagesLength = 4;
+          } else if (screenWidth > 1800 && screenWidth < 2560) {
+            imagesLength = 2;
+          } else {
+            imagesLength = 1;
+          }
+          currentIndex++;
+          if (currentIndex >= imagesLength) {
+            currentIndex = 0;
+          }
+
+          carousel.style.transition = "transform 0.5s ease-in-out";
+          carousel.style.transform = `translateX(${
+            -imageWidth * currentIndex
+          }px)`;
+        }
+        setInterval(slide, 2000);
+      });
+    </script>
   </body>
 </html>
+
+
+
