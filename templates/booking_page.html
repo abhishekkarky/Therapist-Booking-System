@@ -34,10 +34,10 @@
           <label for="appointmentDate">Date:</label>
           <input type="date" id="appointmentDate" name="date" class="w-full border p-2" required />
         </div>
-
         <div class="mb-4">
           <label for="appointmentTime">Time:</label>
-          <input type="time" id="appointmentTime" name="time" class="w-full border p-2" required />
+          <input type="time" id="appointmentTime" name="time" class="w-full border p-2" required
+                 min="10:00" max="17:00" step="3600" />
         </div>
 
         <div class="mb-4">
