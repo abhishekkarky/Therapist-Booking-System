@@ -15,6 +15,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    {% comment %}
     <style>
       .testimonials {
         display: none;
@@ -27,6 +28,13 @@
       #testimonials-container {
         display: flex;
         transition: transform 0.5s ease-in-out;
+      }
+    </style>
+    {% endcomment %}
+
+    <style>
+      .slide-active {
+        transform: translateX(0%) !important;
       }
     </style>
   </head>
@@ -139,17 +147,44 @@
       </div>
     </div>
 
-     <div class="bg-white mb-20 flex flex-col justify-center items-center">
+    <div class="bg-white mb-20 flex flex-col justify-center items-center">
       <div class="flex justify-center items-center mt-20">
         <div class="text-5xl font-semibold text-gray-800">Reviews</div>
       </div>
-        <div class=" carousel relative w-full px-4 mt-6" >
-        <div id="imageContainer" class="w-full flex space-x-10 transition-transform duration-500 ease-in-out">
+
+      <div class="relative w-9/10 mx-auto overflow-hidden">
+        <div
+          id="slider"
+          class="flex gap-4 mb-1 transition-transform duration-1000 ease-in-out"
+        >
           {% if testimonials %} {% for testimonial in testimonials %}
-          <div class=" shadow-full p-4 text-center">
+          <div
+            class="md:w-[450px] w-[95%] flex-shrink-0 md:ml-8 shadow-lg rounded-lg p-4 text-left flex flex-col justify-start items-start gap-4"
+          >
+            <img
+              src="{{ testimonial.image.url }}"
+              class="w-36 h-36 object-cover mx-auto rounded-full"
+              alt="Avatar"
+            />
+            <p class="text-md">{{ testimonial.description }}</p>
+            <div class="flex flex-col items-center w-full">
+              <p class="text-sm font-semibold">{{ testimonial.name }}</p>
+              <!-- <p class="text-sm font-semibold">{{ testimonial.position }}</p> -->
+            </div>
+          </div>
+          {% endfor %} {% endif %}
+        </div>
+      </div>
+      {% comment %}
+      <div class="carousel relative w-full px-4 mt-6">
+        <div
+          id="imageContainer"
+          class="w-full flex space-x-10 transition-transform duration-500 ease-in-out"
+        >
+          {% if testimonials %} {% for testimonial in testimonials %}
+          <div class="shadow-full p-4 text-center">
             <img
               class="rounded-full mb-4 object-cover"
-              
               src="{{testimonial.image.url}}"
               alt="Avatar of Person Watson"
             />
@@ -216,10 +251,9 @@
           <p class="m-4">No Reviews available ...</p>
           {% endif %}
         </div>
-        
       </div>
-    </div> 
-    
+      {% endcomment %}
+    </div>
 
     <div class="flex flex-wrap m-4 md:m-8 lg:m-12 justify-center">
       <div class="w-full md:w-2/3 lg:w-2/5 xl:w-2/6">
@@ -368,6 +402,7 @@
           }
         });
     </script>
+    {% comment %}
     <script>
       window.addEventListener("DOMContentLoaded", function () {
         const carousel = document.querySelector(".carousel");
@@ -404,8 +439,18 @@
         setInterval(slide, 2000);
       });
     </script>
+    {% endcomment %}
+    <script>
+      let currentIndex = 0;
+      const testimonials = document.querySelectorAll("#slider > div");
+      const totalTestimonials = testimonials.length;
+      setInterval(() => {
+        testimonials.forEach(
+          (el) =>
+            (el.style.transform = "translateX(-" + currentIndex * 100 + "%)")
+        );
+        currentIndex = (currentIndex + 1) % totalTestimonials;
+      }, 3000);
+    </script>
   </body>
 </html>
-
-
-
