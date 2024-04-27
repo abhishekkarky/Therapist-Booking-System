@@ -72,6 +72,9 @@ def register(request):
         password = request.POST['password']
 
         User = get_user_model()
+        if(User.objects.filter(username=number).exists()):
+            messages.error(request, 'User akready exists.')
+            return redirect('register')
 
         user = User.objects.create_user(
             username=number, email=email, password=password)
@@ -187,17 +190,29 @@ def bookingManagement(request):
     if request.user.is_authenticated and request.user.is_admin:
         bookings = Booking.objects.all()
         today = datetime.now().date()
+        past_appointments = []
+        today_appointments = []
+        upcoming_appointments = []
+
+        for booking in bookings:
+            if booking.date < today:
+                past_appointments.append(booking)
+            elif booking.date == today:
+                today_appointments.append(booking)
+            else:
+                upcoming_appointments.append(booking)
+
+        sorted_bookings = upcoming_appointments + today_appointments + past_appointments
+
         context = {
-            'bookings': bookings,
+            'bookings': sorted_bookings,
             'today': today,
         }
 
         return render(request, 'admin/booking-management.html', context)
     else:
-        messages.error(
-            request, "You do not have permission to access this page.")
+        messages.error(request, "You do not have permission to access this page.")
         return redirect('dashboard')
-
 
 def teamsManagement(request):
     if (request.user.is_authenticated and request.user.is_admin):

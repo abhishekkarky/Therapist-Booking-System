@@ -34,6 +34,7 @@
           <label for="appointmentDate">Date:</label>
           <input type="date" id="appointmentDate" name="date" class="w-full border p-2" required />
         </div>
+
         <div class="mb-4">
           <label for="appointmentTime">Time:</label>
           <input type="time" id="appointmentTime" name="time" class="w-full border p-2" required
@@ -95,6 +96,45 @@
   
       document.getElementById("appointmentDate").setAttribute("min", tomorrowFormatted);
   </script>
+   
+  <script>
+  document.getElementById("appointmentDate").addEventListener("change", function() {
+    var selectedDate = new Date(this.value);
+    var today = new Date();
+    if (selectedDate.toDateString() === today.toDateString()) {
+      document.getElementById("appointmentTime").setAttribute("min", today.toTimeString().split(' ')[0]);
+    } else {
+      document.getElementById("appointmentTime").removeAttribute("min");
+    }
+  });
+  </script>
+
+<script>
+  document.getElementById('appointmentDate').addEventListener('change', function() {
+      var selectedDate = this.value;
+      checkBooking(selectedDate);
+  });
+
+  function checkBooking(date) {
+      fetch('/check-booking?date=' + date)
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(data => {
+          if (data.exists) {
+              document.getElementById('bookingStatus').innerText = 'Booking already exists for this date.';
+          } else {
+              document.getElementById('bookingStatus').innerText = 'Date is available for booking.';
+          }
+      })
+      .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+      });
+  }
+</script>
     
 </body>
 
