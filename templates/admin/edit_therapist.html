@@ -30,17 +30,22 @@
         aria-label="Close"
       ></button>
     </div>
-    {% endfor %} {% endif %} 
+    {% endfor %} {% endif %}
     <!-- Modal -->
     <div
       id="myModal"
-      class="modal  fixed inset-0 bg-gray-300 bg-opacity-75 flex items-center justify-center"
+      class="modal fixed inset-0 bg-gray-300 bg-opacity-75 flex items-center justify-center"
     >
-      <div class=" bg-white p-6 w-1/2">
-
+      <div class="bg-white p-6 w-1/2">
         <!-- Property Add Form -->
-        <form id="propertyForm" class="grid grid-cols-2 gap-4" method="post" action="{% url 'admin-edit-therapist' therapist_id=details.id %}"
-        enctype="multipart/form-data">{% csrf_token %}
+        <form
+          id="propertyForm"
+          class="grid grid-cols-2 gap-4"
+          method="post"
+          action="{% url 'admin-edit-therapist' therapist_id=details.id %}"
+          enctype="multipart/form-data"
+        >
+          {% csrf_token %}
           <div class="mb-4">
             <label for="propertyName">Name:</label>
             <input
@@ -52,12 +57,11 @@
               required
             />
           </div>
-
           <div class="mb-4">
-            <label for="propertyAddress">Price:</label>
+            <label for="propertyPrice">Price:</label>
             <input
-              type="text"
-              id="propertyAddress"
+              type="number"
+              id="propertyPrice"
               name="price"
               class="w-full border p-2"
               value="{{details.price}}"
@@ -84,13 +88,10 @@
               name="description"
               class="w-full border p-2"
               required
-            >{{details.description}}</textarea>
+            >
+{{details.description}}</textarea
+            >
           </div>
-
-         
-
-         
-         
 
           <div class="mb-4">
             <!-- Add a file input for photos -->
@@ -111,12 +112,11 @@
             Edit Therapist
           </button>
           <a
-          class="col-span-2 bg-gray-700 text-white text-center px-4 py-2 rounded"
-          href="/admin-teams-management"
-
-        >
-          Cancel
-        </a>
+            class="col-span-2 bg-gray-700 text-white text-center px-4 py-2 rounded"
+            href="/admin-teams-management"
+          >
+            Cancel
+          </a>
         </form>
       </div>
     </div>
@@ -132,5 +132,18 @@
       });
     </script>
 
+    <script>
+      document
+        .getElementById("propertyPrice")
+        .addEventListener("input", function (event) {
+          const input = event.target;
+          const value = parseFloat(input.value);
+          if (isNaN(value) || value <= 0) {
+            input.setCustomValidity("Please enter a vaid price");
+          } else {
+            input.setCustomValidity("");
+          }
+        });
+    </script>
   </body>
 </html>
