@@ -73,7 +73,7 @@ def register(request):
 
         User = get_user_model()
         if(User.objects.filter(username=number).exists()):
-            messages.error(request, 'User akready exists.')
+            messages.error(request, 'User already exists.')
             return redirect('register')
 
         user = User.objects.create_user(

@@ -37,18 +37,20 @@
     <section class="dashboard">
       <div class="top">
         <i class="uil uil-bars sidebar-toggle"></i>
-        {% comment %} <div class="search-box">
+        {% comment %}
+        <div class="search-box">
           <i class="uil uil-search"></i>
           <input type="text" placeholder="Search here..." />
-        </div> {% endcomment %}
+        </div>
+        {% endcomment %}
         <img src="/static/images/profile.jpg" alt="" />
       </div>
 
       <div class="dash-content p-6">
         <div class="overview">
           <div class="title flex items-center justify-between mb-4">
-            <div class="flex items-center ">
-              <i class="uil uil-tachometer-fast-alt text-2xl "></i>
+            <div class="flex items-center">
+              <i class="uil uil-tachometer-fast-alt text-2xl"></i>
               <span class="text-2xl ml-2">Our Therapist</span>
             </div>
             <button
@@ -58,13 +60,52 @@
               Add
             </button>
           </div>
+          <div class="flex justify-between border border-gray-200 p-6 w-full">
+            <div class="w-72">
+              <div class="relative w-full min-w-[200px] h-10">
+                <div
+                  class="search-box absolute grid w-5 h-5 place-items-center text-blue-gray-500 top-2/4 right-3 -translate-y-2/4"
+                >
+                  <i class="uil uil-search" aria-hidden="true"></i>
+                </div>
+                <input
+                  type="text"
+                  id="searchInput"
+                  class="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] !pr-9 border-blue-gray-200 focus:border-gray-900"
+                  placeholder=" "
+                /><label
+                  class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-blue-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-gray-500 peer-focus:text-gray-900 before:border-blue-gray-200 peer-focus:before:!border-gray-900 after:border-blue-gray-200 peer-focus:after:!border-gray-900"
+                >
+                  Search by Therapist Name...
+                </label>
+              </div>
+            </div>
+            <div class="relative h-10 w-72 min-w-[200px]">
+              <select
+                id="filterSelect"
+                class="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+              >
+                <option value="">All Specialities</option>
+                {% for therapist in therapist %}
+                <option value="{{ therapist.speciality }}">
+                  {{ therapist.speciality }}
+                </option>
+                {% endfor %}
+              </select>
+              <label
+                class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-gray-900 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500"
+              >
+                Select Status
+              </label>
+            </div>
+          </div>
           <div class="overflow-scroll">
             <table class="w-full bg-white border border-gray-200">
               <thead>
                 <tr>
                   <th class="py-2 px-4 border-b">ID</th>
                   <th class="py-2 px-4 border-b">Image</th>
-                  <th class="py-2 px-4 border-b">Name</th>
+                  <th class="py-2 px-4 border-b name">Name</th>
                   <th class="py-2 px-4 border-b">Price</th>
                   <th class="py-2 px-4 border-b">Speciality</th>
                   <th class="py-2 px-4 border-b">Description</th>
@@ -90,7 +131,8 @@
                   <td class="py-2 px-4 border-b">{{therapist.speciality}}</td>
                   <td class="py-2 px-4 border-b">{{therapist.description}}</td>
                   <td class="py-2 px-4 border-b">
-                    <a href="/admin-edit-therapist/{{ therapist.id }}">
+                    <a href="/admin-edit-therapist/{{ therapist.id }}"
+                      >{{""}}
                       <i
                         id="openEditModal"
                         class="uil uil-edit text-green-500 cursor-pointer hover:text-green-700"
@@ -99,7 +141,7 @@
                     <a
                       href="/admin-delete-therapist/{{ therapist.id }}"
                       type="submit"
-                      ><i
+                      >{{""}}<i
                         class="uil uil-trash-alt text-red-500 cursor-pointer hover:text-red-700"
                         data-property-id="{{ therapist.id }}"
                       ></i>
@@ -206,8 +248,6 @@
         .addEventListener("click", function () {
           document.getElementById("myModal").classList.add("hidden");
         });
-
-      // Handle form submission
     </script>
 
     <script>
@@ -232,6 +272,43 @@
           } else {
             input.setCustomValidity("");
           }
+        });
+    </script>
+    <script>
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", function () {
+          var filter = this.value.toLowerCase();
+          var rows = document.querySelectorAll("tbody tr");
+
+          rows.forEach(function (row) {
+            var name = row
+              .querySelector("td:nth-child(3)")
+              .textContent.toLowerCase();
+            if (name.includes(filter)) {
+              row.style.display = "";
+            } else {
+              row.style.display = "none";
+            }
+          });
+        });
+
+      document
+        .getElementById("filterSelect")
+        .addEventListener("change", function () {
+          var filter = this.value.toLowerCase();
+          var rows = document.querySelectorAll("tbody tr");
+
+          rows.forEach(function (row) {
+            var speciality = row
+              .querySelector("td:nth-child(5)")
+              .textContent.toLowerCase();
+            if (filter === "" || speciality.includes(filter)) {
+              row.style.display = "";
+            } else {
+              row.style.display = "none";
+            }
+          });
         });
     </script>
 
